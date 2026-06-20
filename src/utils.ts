@@ -46,3 +46,64 @@ export function formatDate(dateString: string): string {
     year: "numeric",
   });
 }
+
+export interface ClassStyle {
+  tier: "kinder" | "elementary" | "middle" | "secondary" | "senior";
+  difficulty: string;
+  answerLength: string;
+  vocabularyLevel: string;
+  examples: string[];
+  questionPattern: string;
+}
+
+export function getClassLevelStyle(classNumber: string | number): ClassStyle {
+  const num = parseInt(String(classNumber).replace(/[^0-9]/g, ""), 10) || 1;
+  
+  if (num <= 2) {
+    return {
+      tier: "kinder",
+      difficulty: "Very very easy words, fun and friendly",
+      answerLength: "3 to 5 short lines only",
+      vocabularyLevel: "Super simple & playful vocabulary",
+      examples: ["Like water splashing on a small green leaf", "Like your fluffy pet puppy wagging its tail"],
+      questionPattern: "Small playful activity or draw-a-picture idea"
+    };
+  } else if (num <= 5) {
+    return {
+      tier: "elementary",
+      difficulty: "Easy school explanation, child-friendly",
+      answerLength: "Short bulleted points",
+      vocabularyLevel: "Simple daily-life words with direct meanings",
+      examples: ["Salty water in bowls left under hot sunlight", "Magnets pulling iron paperclips close"],
+      questionPattern: "5 basic school questions and direct answers"
+    };
+  } else if (num <= 8) {
+    return {
+      tier: "middle",
+      difficulty: "School-style revision, clear summary",
+      answerLength: "Important points with definitions",
+      vocabularyLevel: "Standard textbook vocabulary & terminology",
+      examples: ["Plants converting solar heat via chloroplast leaf systems", "Friction resisting slide boards in playparks"],
+      questionPattern: "Summary, Keywords, Short/Long QA, MCQs, & Practice Questions"
+    };
+  } else if (num <= 10) {
+    return {
+      tier: "secondary",
+      difficulty: "Exam-focused concepts, simple flowcharts",
+      answerLength: "Detailed, structured exam format",
+      vocabularyLevel: "Board-syllabus grade definitions & key equations",
+      examples: ["Reaction equations or force vector lines", "Carbon cycle diagrams showing combustion and respiration"],
+      questionPattern: "Definitions, Formula Sheet, Diagrams, Short/Long Answers, MCQs, & Previous-Year Questions"
+    };
+  } else {
+    return {
+      tier: "senior",
+      difficulty: "Advanced but easy college prep, neat derivations",
+      answerLength: "Highly comprehensive textbook board styles",
+      vocabularyLevel: "Technical syllabus terms, academic logic patterns",
+      examples: ["Thermodynamic calculations under isobaric states", "Step-by-step mathematical derivation of kinematics"],
+      questionPattern: "Full Concepts, Derivations, Numericals, Case Studies, Assertion-Reason, Board Exam-Style Answers, Keywords, and Revision Practice Prompts"
+    };
+  }
+}
+

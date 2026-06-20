@@ -5,7 +5,7 @@ import {
   Bookmark, ArrowRight, Lightbulb, GraduationCap, ChevronRight
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { copyToClipboard, downloadTextFile } from "../utils";
+import { copyToClipboard, downloadTextFile, getClassLevelStyle } from "../utils";
 import { SavedWorkItem } from "../types";
 
 interface ChapterLearningSystemProps {
@@ -36,140 +36,347 @@ function getLocalChapterContent(
 ): string {
   const finalChName = chapter || "Standard Chapter";
   const normSubject = subject || "Science";
+  const style = getClassLevelStyle(classNum);
 
-  if (sectionId === "intro") {
-    return `# 🌅 Chapter Introduction: ${finalChName}
-*Class ${classNum} • Subject: ${normSubject} • StudyMitra Courseware*
+  if (style.tier === "kinder") {
+    if (sectionId === "intro") {
+      return `# 🌅 Welcome Kids! Lesson Overview: ${finalChName} 🎈
+*Class ${classNum} • ${normSubject} • Let's Learn Together!*
 
-Welcome to this comprehensive study guide for **${finalChName}**, which is one of the most exciting and important chapters in the Class ${classNum} **${normSubject}** syllabus!
+Hi there! Today we are looking at the wonderful story of **${finalChName}**.
+- It is filled with magical, neat ideas.
+- We will learn with super-easy words and cute pictures.
+- Get your favorite sketch board ready! Let's explore happily! ✨`;
+    }
+    if (sectionId === "summary") {
+      return `# 📋 Sweet Summary: ${finalChName} Index
+*Class ${classNum} • Super Easy 3-Line Summary*
 
-Understanding this topic will give you an amazing head-start in your classroom. Here, we break down how different components are organized, how they function, and where we witness these principles directly in our surrounding environments.
+Here are the sweet and short details you can practice:
+- **Our Main Topic**: We are investigating **${finalChName}**!
+- **Fun Activity**: ${style.examples[0]}.
+- **Why we love it**: It teaches us how happy elements play together safely.`;
+    }
+    if (sectionId === "definitions") {
+      return `# 📚 Super Easy Definitions Glossary
+*Class ${classNum} • Fun Definitions*
 
-Let's begin this journey to clear all your doubts and make you a classroom champion! 🚀`;
+- **The Main Chapter**: **${finalChName}** is the topic of our fun science lesson today!
+- **Playful Elements**: Tiny, happy puzzle blocks that build up our lessons.
+- **Friendly Teacher**: A super helpful guide who helps us draw clear letters!`;
+    }
+    if (sectionId === "keywords") {
+      return `# 🔑 Happy Keywords List
+- **Learn**: Listening happily with big smiling eyes.
+- **Draw**: Creating lines and coloring with warm red, blue, and green pencils!
+- **Kindness**: Helping your classmates find their lost erasers.`;
+    }
+    if (sectionId === "formulas") {
+      return `# ⚙️ Fun Counting & Shapes Finder
+Here are precious simple shapes to practice counting:
+- **The Circle**: A perfectly round coin with zero corners.
+- **The Triangle**: A sweet shape with $3$ shiny corners!
+- **The Square**: Has $4$ straight sides. Count them: $1, 2, 3, 4$!`;
+    }
+    if (sectionId === "examples") {
+      return `# 💡 Happy Examples: ${finalChName}
+- **Example 1**: ${style.examples[0]}
+- **Example 2**: ${style.examples[1]}
+- **Example 3**: A shiny butterfly flying high over red garden roses.`;
+    }
+    if (sectionId === "mcq_quiz") {
+      return `# 🎯 Simple Mini Quiz for Little Champions!
+Try picking the happiest choice:
+
+1. **What are we studying happily today?**
+   - A) Cute **${finalChName}**!
+   - B) Sleeping late
+   - *Correct Answer: A*
+
+2. **What color is our lovely daytime Sun?**
+   - A) Warm bright yellow
+   - B) Dark blue
+   - *Correct Answer: A*
+
+3. **Where do sweet flowers grow?**
+   - A) In our beautiful garden soil
+   - B) On standard kitchen plates
+   - *Correct Answer: A*`;
+    }
+    if (sectionId === "practice_q" || sectionId === "homework_help" || sectionId === "exam_tips" || sectionId === "short_q" || sectionId === "long_q") {
+      return `# 🎨 Playful Craft Exercise & Practice: ${finalChName}
+- **Your Fun Prompt**: Grab a shiny clean page and draw a happy smiling Sun over grassy green plains!
+- **Play Game**: Count how many crayons are inside your pencil box.
+- **Teacher Star Tip**: Always hold your pencil neatly and write your initials with high pride! ⭐`;
+    }
   }
 
-  if (sectionId === "summary") {
-    return `# 📋 Simple Summary: ${finalChName}
-*Class ${classNum} • Subject: ${normSubject} • Quick Revision Board*
+  if (style.tier === "elementary") {
+    if (sectionId === "intro") {
+      return `# 🌅 Elementary Intro: ${finalChName}
+*Class ${classNum} • Subject: ${normSubject} • Simple Explainer*
 
-Here are the critical takeaways from **${finalChName}** simplified into clear, bite-sized bullet points:
-- **Core Concept**: Understanding the key processes and configurations of ${finalChName}.
-- **Primary Function**: It helps explain why systems, creatures, or equations interact in specific manners.
-- **Why it Matters**: Learning this is essential for scoring well in upcoming exams and understanding subsequent chapters.
-- **Real-World Connection**: We observe similar patterns and behaviors when executing daily laboratory experiments or writing creative school assignments.`;
+Welcome to your study hub for **${finalChName}**! 
+Here, we decode how key variables coordinate inside Class ${classNum} **${normSubject}** lessons. Understanding this builds immediate classroom confidence!`;
+    }
+    if (sectionId === "summary") {
+      return `# 📋 Short Point Summary: ${finalChName}
+- **Core Standard**: This chapter focuses on simple processes that explain nature.
+- **Main Principle**: Systems require balance, inputs, and standard catalysts.
+- **Practical Application**: ${style.examples[0]}.
+- **Revision Action**: Highlight key definitions in your textbook pages.`;
+    }
+    if (sectionId === "definitions") {
+      return `# 📚 Simple Definitions Finder
+1. **${finalChName}**: The direct concept representing how factors of ${normSubject} combine.
+2. **Elementary Factors**: Essential natural blocks that drive daily reactions, e.g., *${style.examples[1]}*.`;
+    }
+    if (sectionId === "keywords") {
+      return `# 🔑 Direct Vocabulary Boosters
+- **Analyze**: Breaking down simple things step-by-step.
+- **Sequence**: Placed in an ordered, tidy list (like $1 \\rightarrow 2 \\rightarrow 3$).
+- **Observe**: Watching experiments closely to write exact notes.`;
+    }
+    if (sectionId === "formulas") {
+      return `# ⚙️ Elementary Equations Finder
+- **The Equal Balance Law**: Every reaction must balance initial inputs.
+- **Formula 1**: $\\text{Output Amount} = \\text{Standard Raw Materials} \\times \\text{Rate Factor}$`;
+    }
+    if (sectionId === "examples") {
+      return `# 💡 Easy Everyday Connections
+- **In Parks**: ${style.examples[0]}.
+- **In Basements**: ${style.examples[1]}.
+- **In Workbooks**: Writing answers with structured numbers.`;
+    }
+    if (sectionId === "mcq_quiz" || sectionId === "short_q" || sectionId === "long_q" || sectionId === "practice_q" || sectionId === "homework_help" || sectionId === "exam_tips") {
+      return `# 🎯 5 Basic Questions and Direct Answers Practice
+1. **Q: Why does the system change state?**
+   - *A: External variables like thermal changes push molecules to react.*
+2. **Q: Give a brief example of standard cycles.**
+   - *A: Consider: ${style.examples[0]}.*
+3. **Q: What is recommended to write neat papers?**
+   - *A: Always use bulleted lists and draw straight margins!*
+4. **Q: Define raw factors briefly.**
+   - *A: Basic, unrefined inputs before they are combined.*
+5. **Q: How should a Class ${classNum} student study this?**
+   - *A: Spend 5 minutes daily on definitions and answer keys!*`;
+    }
   }
 
-  if (sectionId === "definitions") {
-    return `# 📚 Important Definitions Finder: ${finalChName}
-*Class ${classNum} • Subject: ${normSubject} • Academic Glossary*
+  if (style.tier === "middle") {
+    // Return standard middle-school style guides
+    if (sectionId === "intro") {
+      return `# 🌅 Middle School Introduction: ${finalChName}
+*Class ${classNum} • Subject: ${normSubject} • StudyMitra Engine*
 
-Make sure to bookmark these vital definitions which are frequently tested in school exams:
-
-1. **${finalChName} Core Process**: The systematic sequence of events or rules that describe how parts integrate and operate within this chapter framework.
-2. **Elementary Factors**: The basic units or parts of ${normSubject} that build up the entire topic structure.
-3. **Responsive Variable**: Any feature or quantity that alters its state during active classroom experiments or mathematical derivations.`;
-  }
-
-  if (sectionId === "keywords") {
-    return `# 🔑 High-Yield Keywords & Vocabulary: ${finalChName}
-*Class ${classNum} • Subject: ${normSubject} • Verbal Glossary*
-
-Boost your vocabulary and score active marks in your answers with these essential terms:
-- **Analyze**: To break down a complex chapter topic into simpler parts to understand how they work together.
-- **Classification**: Setting terms or materials into specific groups based on their properties or rules.
-- **Derivation**: Solving or proving formulas step-by-step from base mathematics or laws.
-- **Systematic**: Working or studying in an organized, step-by-step manner.`;
-  }
-
-  if (sectionId === "formulas") {
-    return `# ⚙️ Formula Finder & Core Laws: ${finalChName}
-*Class ${classNum} • Subject: ${normSubject} • Equations Sheet*
-
-Here is your handy classroom cheat-sheet for **${finalChName}** equations and definitions:
-
-### 📐 Standard Key Rules:
-- **The Golden Proportion**: The balance between inputs and outputs in ${normSubject} remains constant.
-- **Formula 1**: $\\text{Balance} = \\text{Active Input} \\times \\text{Standard Efficiency Factor}$
-- **Formulation 2**: $\\text{Net Output} = \\text{Initial State} + \\Delta \\text{Change Amount}$
-
-> **Study Reminder**: Always write down units (like meters, grams, or numbers) while completing calculations in your workbook!`;
-  }
-
-  if (sectionId === "examples") {
-    return `# 💡 Real-Life Connections: ${finalChName}
-*Class ${classNum} • Subject: ${normSubject} • Everyday Science*
-
-Have you ever wondered where we view the ideas of **${finalChName}** outside our textbook pages? Here are some simple, fun examples:
-- **In Our Kitchen**: The way ingredients, liquids, thermal heat, and timing combine to cook delicious meals perfectly.
-- **In Nature**: How water, rainfall, air, and plant photosynthesis operate harmoniously to support global life.
-- **In School Athletics**: The way speed, force, angles, and team coordination decide the scores.`;
-  }
-
-  if (sectionId === "mcq_quiz") {
-    return `# 🎯 Mini MCQ Generator Quiz: ${finalChName}
-*Class ${classNum} • Subject: ${normSubject} • Self-Assessment Practice*
-
-Try solving these 5 multiple choice questions. The answers are provided at the end for immediate revision:
-
-### 📝 Questions:
+Welcome to our formal syllabus review of **${finalChName}** for Grade ${classNum} pupils. This unit maps out fundamental properties, structural models, and everyday experiments. Core takeaways emphasize systematic calculations and highlighted vocabulary terms.`;
+    }
+    if (sectionId === "summary") {
+      return `# 📋 Summary Review Sheet
+* **Main Concept**: Understanding the key processes and configurations of ${finalChName}.
+* **Primary Function**: It helps explain why systems, creatures, or equations interact in specific manners.
+* **Academic Significance**: Learning this is essential for scoring well in upcoming exams and subsequent modules.
+* **Real-World Connection**: We observe similar patterns and behaviors when executing daily laboratory experiments like *${style.examples[0]}*.`;
+    }
+    if (sectionId === "definitions") {
+      return `# 📚 Middle-School Definitions Glossary
+1. **${finalChName} Process**: The sequence of events that describe how parts integrate and operate within this chapter framework.
+2. **Elementary Factors**: The basic units of ${normSubject} that build up the entire topic structure, such as *${style.examples[1]}*.
+3. **Responsive Variable**: Any feature or quantity that alters its state during active classroom experiments.`;
+    }
+    if (sectionId === "keywords") {
+      return `# 🔑 Core High-Yield Vocabulary
+* **Analyze**: To break down a complex chapter topic into simpler parts to understand how they work together.
+* **Classification**: Setting terms or materials into specific groups based on their properties or rules.
+* **Systematic**: Working or studying in an organized, step-by-step manner.`;
+    }
+    if (sectionId === "formulas") {
+      return `# ⚙️ Formula Sheet & Equations Finder
+Here is your handy classroom cheat-sheet for Class ${classNum} equations:
+* **The Golden Proportion**: The balance between inputs and outputs in ${normSubject} remains constant.
+* **Formula 1**: $\\text{Balance} = \\text{Active Input} \\times \\text{Standard Efficiency Factor}$
+* **Formulation 2**: $\\text{Net Output} = \\text{Initial State} + \\Delta \\text{Change Amount}$`;
+    }
+    if (sectionId === "examples") {
+      return `# 💡 Real-Life Connections: ${finalChName}
+* **Kitchen Connections**: The way ingredients, liquids, thermal heat, and timing combine to cook delicious meals perfectly.
+* **Natural Cycles**: How water, rainfall, air, and plant photosynthesis operate harmoniously to support global life, like *${style.examples[0]}*.
+* **Playgrounds**: ${style.examples[1]}.`;
+    }
+    if (sectionId === "mcq_quiz") {
+      return `# 🎯 Standard MCQ Practice Assessment
 1. **What is the primary core theme behind ${finalChName}?**
    - A) The main foundational building blocks
    - B) A completely unneeded auxiliary idea
-   - C) Memorizing formulas blindly without logic
-   - D) Skipping classes on exam days
+   - *Correct Answer: A*
 
 2. **Why do we partition chapter material step-by-step?**
    - A) To make definitions easy and highly clear
    - B) To run away from solving questions
-   - C) Because it is an old rule
-   - D) To do things randomly
+   - *Correct Answer: A*
 
 3. **Which factor is most essential in ${normSubject} experiments?**
    - A) Systematic observations and measurements
    - B) Quick guesses without calculations
-   - C) Using colorful ink only
-   - D) Keeping notebooks empty
-
-4. **In Class ${classNum} curriculum, where is ${finalChName} mostly used?**
-   - A) Solving practical workbooks and exam papers
-   - B) Reading unrelated video games
-   - C) Making mock definitions
-   - D) None of the above
-
-5. **Who is your favorite study help desk?**
-   - A) Our digital StudyMitra Student Helper Hub!
-   - B) An empty study notebook
-   - C) Ignoring school studies
-   - D) Confusing textbooks
-
----
-
-### 🔑 Answer Key / Explanations:
-1. **Answer**: **A**. Understanding the foundational concepts of ${finalChName} helps you build robust academy knowledge.
-2. **Answer**: **A**. Breaking down chapter elements allows your brain to form clean visual connections.
-3. **Answer**: **A**. Science and math demand logical, clear calculations to secure exact grades.
-4. **Answer**: **A**. It directly forms the foundation of Class ${classNum} curriculum exercises.
-5. **Answer**: **A**. Bringing automated notes, quizzes, and solvers to help you anytime!`;
-  }
-
-  if (sectionId === "practice_q") {
-    return `# 🏋️ Practice Exercises & Prompts: ${finalChName}
-*Class ${classNum} • Subject: ${normSubject} • Homework Board*
-
-Sharpen your understanding by attempting these practice prompts:
+   - *Correct Answer: A*`;
+    }
+    if (sectionId === "practice_q" || sectionId === "short_q" || sectionId === "long_q" || sectionId === "homework_help" || sectionId === "exam_tips") {
+      return `# 🏋️ Practice Exercises & Prompts
 1. **Short Question**: Define the main principle of ${finalChName} in your own words.
-2. **Interactive Activity**: Locate two examples in your surrounding household or garden that resemble the key ideas of this chapter. Explain your observations in 3 lines.
+2. **Interactive Activity**: Locate two examples in your surrounding household or garden that resemble the key ideas of this chapter.
 3. **Maths/Science Exercise**: Why does the efficiency factor remain constant? Calculate the expected balance if the inputs are doubled.`;
+    }
   }
 
-  // Generic fallback for any other tab
-  return `# ⚡ Revision Sheet: ${finalChName} (${sectionId})
-*Class ${classNum} • Subject: ${normSubject} • StudyMitra Engine*
+  if (style.tier === "secondary") {
+    // Tier 4: Class 9 to 10
+    if (sectionId === "intro") {
+      return `# 🌅 Secondary Board Exam Intro: ${finalChName}
+*Class ${classNum} • Subject: ${normSubject} • CBSE Exam Syllabus Unit*
 
-Here is your focused academic guide for **${finalChName}**:
-- **Why it matters**: It is a key module designed under Class ${classNum} standards.
-- **Guidance**: Break down the text carefully, make highlighted columns, and practice matching cards.
-- **Tip**: You can copy or download this file to revise offline before your final examinations!`;
+Welcome to this extensive exam-focused guide for **${finalChName}**, which represents a critical chapter in class curriculum plans. Mastering this topic guarantees excellent marks in your high-school board finals. Let's analyze key formulas, conceptual diagrams, and previous-year exam trends!`;
+    }
+    if (sectionId === "summary") {
+      return `# 📋 Detailed but Simple Explanations: ${finalChName}
+This unit investigates the chemical or mechanical behaviors of **${finalChName}** systems:
+- **Mechanics of Change**: States of equilibrium are altered when localized conditions of temperature, pressure, or concentrations shift.
+- **The Core Law**: Every change is counteracted by system responses to ensure balanced energy ratios.
+- **Practical Application**: ${style.examples[0]}.`;
+    }
+    if (sectionId === "definitions") {
+      return `# 📚 Important Definitions Finder
+* **Standard Variable Capacity**: The absolute ceiling representing how much energy or reactant can be dissolved safely in a solvent matrix under $1\\text{ atm}$.
+* **Active Catalysis Coefficient**: The fraction expressing how effectively a catalyst speeds up rate cycles without being consumed.
+* **Equilibrium Constant ($K_{eq}$)**: The ratio of product concentrations to reactant concentrations at steady thermodynamic states.`;
+    }
+    if (sectionId === "keywords") {
+      return `# 🔑 Highly Crucial Index vocabularies
+* **Stoichiometric Balance**: The quantitative relationship between reactants and products in chemical reactions.
+* **Enthalpy of State**: The total heat content of a thermodynamic system.
+* **Electrolysis Velocity**: The rate at which mechanical decomposition occurs under constant current fields.`;
+    }
+    if (sectionId === "formulas") {
+      return `# ⚙️ Formula Sheet & Equations Diagram
+Here are the critical quantitative tools for your board revisions:
+* **The Fundamental Ratio**:
+  $$PV = nRT$$
+* **Rate Kinetics Formula**:
+  $$\\text{Rate} = k [A]^x [B]^y$$
+* **Work Equilibrium**:
+  $$W = -P \\cdot \\Delta V$$
+
+> **Workbook Tip**: Always declare standard SI units (like Joules, Pascals, or Kelvin) clearly to preserve complete board exam grades!`;
+    }
+    if (sectionId === "examples") {
+      return `# 💡 Diagrams & Real-World Connections
+* **Diagram Explanation**: The standard textbook flowchart for **${finalChName}** outlines:
+  $$\\text{Reagents} \\xrightarrow[\\Delta \\text{Heat}]{\\text{Catalyst}} \\text{Transient Complex} \\rightarrow \\text{Stable Products}$$
+* **Natural Examples**:
+  - Carbon dioxide cycles in native forests.
+  - ${style.examples[0]}
+  - ${style.examples[1]}`;
+    }
+    if (sectionId === "mcq_quiz") {
+      return `# 🎯 Board-Style MCQ Simulator
+1. **What is the unit of the equilibrium constant for identical stoichiometric equations?**
+   - A) It is a dimensionless ratio (unitless)
+   - B) Joules per mole
+   - *Correct Answer: A*
+
+2. **How does adding a catalyst impact output yield?**
+   - A) Increases reaction rate but has no impact on final yield equilibrium
+   - B) Increases final yield exponentially
+   - *Correct Answer: A*
+
+3. **What does a negative Enthalpy ($\\Delta H < 0$) indicate?**
+   - A) Exothermic process releasing thermal energy
+   - B) Endothermic process absorbing heat
+   - *Correct Answer: A*`;
+    }
+    if (sectionId === "practice_q" || sectionId === "short_q" || sectionId === "long_q" || sectionId === "homework_help" || sectionId === "exam_tips") {
+      return `# 🏋️ Previous-Year style Board Questions & Practice Answers
+* **Q1 (3 Marks - Short)**: Explain why reaction velocity increases with temperture.
+  * *Answer: Rising temperature heightens average kinetic energies of particles, causing frequent collision rates that exceed activation thresholds.*
+* **Q2 (5 Marks - Long)**: Formulate the full system model for ${finalChName} and compile a neat labeled diagram explanation.
+  * *Answer: The system consists of reactant input manifolds, physical processing steps governed by catalyst variables, and product extraction channels. The diagram should map inputs entering from the left, peak energy levels at the center, and stable final products on the right.*
+* **Q3 (2 Marks)**: Identify the limiting factor in *${style.examples[0]}*.
+  * *Answer: The limiting factor is typically raw concentration ratios, which determines reaction limits.*`;
+    }
+  }
+
+  // Tier 5: Class 11 to 12 - Senior
+  if (sectionId === "intro") {
+    return `# 🎓 Advanced Concept Intro: ${finalChName}
+*Class ${classNum} • Subject: ${normSubject} • Advanced University-Prep Core*
+
+Welcome to this rigorous academic review of **${finalChName}** tailored for Classes 11 and 12. This unit provides a complete mathematical, thermodynamic, and physical analysis, utilizing advanced equations, derivations, and step-by-step numerical solvers to prepare you for college entrance exams!`;
+  }
+  if (sectionId === "summary") {
+    return `# 📋 Advanced Concept Summary: ${finalChName}
+* Complete physical mechanism governing physical states.
+* Kinetic mechanisms are characterized by the Arrhenius Activation Equation:
+  $$k = A e^{-\\frac{E_a}{RT}}$$
+* We observe this molecular framework in: *${style.examples[0]}*.`;
+  }
+  if (sectionId === "definitions") {
+    return `# 📚 High-Level Academic definitions
+1. **Gibbs Free Energy ($\\Delta G$)**: The thermodynamic potential used to calculate the maximum reversible work performed by thermodynamic systems under constant temperatures and pressures.
+2. **Boltzmann Distribution**: The relative probability fraction of molecular systems occupying specific energy states.
+3. **Arrhenius Term (A)**: The pre-exponential frequency factor representing active collision orientations.`;
+  }
+  if (sectionId === "keywords") {
+    return `# 🔑 Highly Technical Keywords
+* **Entropy Optimization**: The quantitative measure of thermodynamic disorder in closed multi-particle schemes.
+* **Schrödinger Wavefunction**: The spatial probability function governing quantum energy shells.
+* **Isotropic Coordinate Field**: Symmetrical spatial coordinates where material properties are uniform in all directions.`;
+  }
+  if (sectionId === "formulas") {
+    return `# ⚙️ Derivations & Complete Formula Sheet
+Let's analyze the mathematical proof of the integrated rate law:
+1. **Step 1: Define First-Order Rate Equation**:
+   $$-\\frac{d[A]}{dt} = k [A]$$
+2. **Step 2: Separate Variables**:
+   $$\\frac{d[A]}{[A]} = -k \\, dt$$
+3. **Step 3: Integrate Both Sides**:
+   $$\\int_{[A]_0}^{[A]_t} \\frac{d[A]}{[A]} = -k \\int_{0}^{t} dt \\implies \\ln \\frac{[A]_t}{[A]_0} = -kt$$
+4. **Step 4: Express Exponentially**:
+   $$[A]_t = [A]_0 e^{-kt}$$
+*Conclusion*: Concentrated reactants decay as an exponential function of timer values, explaining standard kinetics.`;
+  }
+  if (sectionId === "examples") {
+    return `# 💡 Case Studies & Step-by-Step Numericals
+**Advanced Challenge Case**:
+A $0.1\\text{ M}$ monoprotic buffer solution has an acid dissociation constant of $K_a = 1.8 \\times 10^{-5}$. Find the net hydronium pH.
+- *Step 1*: Write the dissociation formula: $K_a = \\frac{[H^+][A^-]}{[HA]} \\approx \\frac{x^2}{0.1}$.
+- *Step 2*: Solve for $x$: $x^2 = 1.8 \\times 10^{-6} \\implies x = 1.34 \\times 10^{-3}\\text{ M}$.
+- *Step 3*: Compute pH: $\\text{pH} = -\\log_{10}(1.34 \\times 10^{-3}) = 2.87$!`;
+  }
+  if (sectionId === "mcq_quiz") {
+    return `# 🎯 Advanced Entrance Exam MCQ Trainer
+1. **Which parameter correctly represents free enthalpy at equilibrium states?**
+   - A) $\\Delta G^{\\circ} = -RT \\ln K_{eq}$
+   - B) $\\Delta G^{\\circ} = RT \\ln K_{eq}$
+   - *Correct Answer: A*
+
+2. **How does temperature affect standard transition states?**
+   - A) It provides kinetic velocity to cross activation barriers but does not lower the activation energy itself
+   - B) It lowers activation barriers directly
+   - *Correct Answer: A*
+
+3. **What represents an isometric thermodynamic change?**
+   - A) Volumetric expansion is exactly zero ($dV = 0$)
+   - B) Pressure changes are exactly zero ($dP = 0$)
+   - *Correct Answer: A*`;
+  }
+
+  // practice, homework, exams
+  return `# 🏆 Senior Board Prep, Revision Notes & Assertion-Reason Qs
+* **Assertion [A]**: Catalysts increase chemical reaction speeds without altering enthalpy states.
+* **Reason [R]**: Catalysts bypass the traditional high activation energy transition state, opening a lower energy pathway.
+* **Evaluation**: *Both [A] and [R] are true, and [R] is the correct explanation of [A].*
+
+### 🏋️ Practice Homework Prompt:
+> **Question**: Formulate a complete physical derivation illustrating thermodynamics under isobaric expansion states. Explain why work is non-zero. Check your answers step-by-step!`;
 }
 
 export default function ChapterLearningSystem({ onSaveWork }: ChapterLearningSystemProps) {

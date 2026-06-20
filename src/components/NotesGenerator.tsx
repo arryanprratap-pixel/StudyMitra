@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BookOpen, Sparkles, Loader2, Copy, Download, Check, Save } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { copyToClipboard, downloadTextFile } from "../utils";
+import { copyToClipboard, downloadTextFile, getClassLevelStyle } from "../utils";
 import { SavedWorkItem } from "../types";
 
 interface NotesGeneratorProps {
@@ -10,27 +10,173 @@ interface NotesGeneratorProps {
 
 function getLocalNotes(topic: string, classNum: string, subject: string, length: "short" | "medium" | "long"): string {
   const finalTopicName = topic || "Important Concepts";
-  const numBullets = length === "short" ? 3 : length === "medium" ? 6 : 10;
-  
-  return `# 📖 Class-Calibrated Study Notes: ${finalTopicName}
-*Class ${classNum} • Subject: ${subject} • Length: ${length} Notes • Reliable Fallback Mode*
+  const style = getClassLevelStyle(classNum);
 
-Here are the most important study points prepared specifically for your standard to make revision smooth and exciting:
+  if (style.tier === "kinder") {
+    return `# 🎒 Fun Notes: ${finalTopicName} 🎈
+*Class ${classNum} • Subject: ${subject} • Easy Friendly Mode*
 
-### 🌟 Topic Overview:
-Every critical system in **${subject}** is built of structured principles. When examining **${finalTopicName}**, we explore how key variables interact under unified academic frameworks.
+### 🌟 Hi little friends! Let's learn about **${finalTopicName}** today!
 
-### 🔑 Core Key Points (Class-Optimized):
-- **Concept Principle**: ${finalTopicName} is a foundational building block in the CBSE/School curriculum.
-- **Why it Matters**: Understanding this is highly essential for scoring perfect marks in chapter assessments and midterm exams.
-- **Scientific/Social Truth**: All factors combine sequentially to deliver systematic, reproducible results.
-${numBullets > 3 ? `- **Interactive Guidance**: Sharing thoughts with study buddies or asking teachers in class clarifies typical homework questions quickly.\n- **Workbook Tips**: Practice drawing neat flowcharts or diagrams in your school copies to visualize the concepts.` : ""}
-${numBullets > 6 ? `- **Classroom Experiment**: Always observe variables systematically and record readings carefully during lab periods.\n- **Revision Cycle**: Dedicate at least 10 minutes daily to reading these definitions to secure great recall.\n- **Aesthetic Pairings**: Frame your answers in bullet points with highlighted key vocabularies to make notes look neat and highly scored.\n- **Vocabulary Expansion**: Note down difficult words separately in your personal school dictionary.` : ""}
+- **What is it?** It is a wonderful and exciting part of ${subject}! 
+- **Fun Example**: ${style.examples[0]}!
+- **Did you know?** ${style.examples[1]}.
+- **Happy thoughts**: Learning is like playing with magical puzzle pieces!
 
-### 🏆 Top 3 Exam Tips:
-1. **Focus on Definitions**: Memorize key glossary terms exactly as stated in your textbook.
-2. **Step-by-Step Layout**: When answering long theory questions, break down responses with numbers or lists.
-3. **Continuous Testing**: Practice mini quizzes regularly to solidify your classroom scores!`;
+---
+### 🎨 Color & Play Activity:
+> **Draw a beautiful picture** of *"${finalTopicName}"* in your school drawing sketchpad using your favorite warm yellow and green crayons! Show it to your parents tonight for a high five! ⭐`;
+  }
+
+  if (style.tier === "elementary") {
+    return `# 💡 Elementary Notes: ${finalTopicName}
+*Class ${classNum} • Subject: ${subject} • Easy Explanation Level*
+
+### 📝 Chapter Overview and Simple Definition:
+In Class ${classNum} ${subject}, **${finalTopicName}** helps us understand the natural processes around us. Here is the simplest definition:
+> **${finalTopicName}** is the concept that explains how essential objects interact or work together.
+
+### 🌟 Primary Learning Points:
+- **Point 1**: It constitutes an essential component of the ${subject} lesson plan.
+- **Point 2**: Examples include: *${style.examples[0]}*.
+- **Point 3**: Keeping your worksheets organized makes revision simple and sweet.
+
+---
+### ❓ 5 Basic Questions & Direct Answers:
+1. **Q: What is the main idea of ${finalTopicName}?**
+   - *A: It represents the simple way elements of ${subject} organize themselves.*
+2. **Q: Can we see this in everyday life?**
+   - *A: Yes, such as ${style.examples[1]}.*
+3. **Q: Why should we learn this topic?**
+   - *A: It builds your daily school knowledge to unlock smart grades.*
+4. **Q: Is it tough to memorize?**
+   - *A: Not at all! Just break the word into easy spelling parts.*
+5. **Q: How can I practice?**
+   - *A: Discuss these 5 definitions with your best classroom friend!*`;
+  }
+
+  if (style.tier === "middle") {
+    return `# 📖 School-Style Notes: ${finalTopicName}
+*Class ${classNum} • Subject: ${subject} • Grade Syllabus Core*
+
+### 📋 Chapter Summary:
+This standard middle-school segment details the systematic operations of **${finalTopicName}** within **${subject}**. Students will master core terminologies, cycle phases, and practical examples.
+
+### 🔑 Important Points:
+- All parts interact dynamically to produce balanced, predictable states.
+- Understanding the relationship is key to scoring perfect marks in chapter exams.
+- Main variables must always be observed under safe conditions.
+
+### 📚 Essential Definitions:
+1. **${finalTopicName}**: The scientific process or structure where parts of ${subject} coordinate.
+2. **Elementary Factors**: Natural variables that define the speed or effectiveness of the cycle.
+
+### 💡 Examples from Daily Life:
+- *${style.examples[0]}*
+- *${style.examples[1]}*
+
+---
+### 📝 Practice Short & Long Q&A:
+* **Q1 (Short): State the role of ${finalTopicName} in a single sentence.**
+  * *Answer: It serves as the primary system mechanism triggering balanced growth in ${subject}.*
+* **Q2 (Long): Explain the main stages of this system in detail.**
+  * *Answer: The process features three active stages: first, initiation (absorbing solar inputs or variables); second, execution (synthesizing new outcomes); and third, yield (releasing standard end-products safely).*
+
+---
+### 🎯 3 Practice MCQs:
+1. **What is the first step in ${finalTopicName}?**
+   - A) Initiation and variable absorption
+   - B) Final shutdown
+   - C) Disregarding variables completely
+   - *Correct Answer: A*
+2. **Which of these is a typical everyday example?**
+   - A) Let's think of ${style.examples[0]}
+   - B) Standard clock mechanisms
+   - C) None of the above
+   - *Correct Answer: A*
+3. **How do we make middle-school study efficient?**
+   - A) Summaries, clear cards, and active MCQ practice
+   - B) Leaving textbooks closed
+   - *Correct Answer: A*
+
+---
+### 🏋️ Practice Homework Prompt:
+> **Exercise**: Create a handwritten cycle chart showing how elements flow. Add a neat light yellow border around your workspace!`;
+  }
+
+  if (style.tier === "secondary") {
+    return `# 🎯 Board Exam-Focused Notes: ${finalTopicName}
+*Class ${classNum} • Subject: ${subject} • CBSE / ICSE Standard Layout*
+
+---
+### 📋 Detailed Concept Summary:
+At a Class ${classNum} level, **${finalTopicName}** is highly crucial. It is structured under key scientific/social equations and forms a repeating theme in term assessments.
+
+### 📚 Core Definitions & Terminologies:
+- **Primary Mechanism**: The chemical or physical transformation that defines the state of a system.
+- **Limiting Factors**: The variables (temperature, concentration, active catalysts) that govern rates of reaction.
+
+### 📐 Relevant Formulas & Core Laws:
+Here are the fundamental rules for mathematical modeling:
+$$\\text{Rate of Response} \\propto \\frac{\\text{Concentration of Ingredients}}{\\text{Friction / Resistance Factor}}$$
+
+> **Diagram Explanation**: In standard textbooks, the curve illustrating this process represents a sigmoidal or logarithmic trend. The plateau indicates saturation of variables.
+
+---
+### 🏆 3 Essential Previous-Year Board Style Q&As:
+1. **Q: Define ${finalTopicName} and outline two primary limiting factors. (3 Marks)**
+   - *Answer: ${finalTopicName} represents the structured process where variables adapt to external catalysts. The two primary limiting factors are: (i) Thermal Temperature ranges, and (ii) Component Concentration.*
+2. **Q: Graph the response velocity and explain the curve. (5 Marks)**
+   - *Answer: The graph features: (i) An exponential lag phase, (ii) A steep log growth phase, and (iii) A stationary plateau. The plateau represents maximum capacity.*
+3. **Q: Distinguish between the primary inputs and outputs of this system. (2 Marks)**
+   - *Answer: The primary inputs consist of essential raw variables, whereas the outputs comprise calibrated stable products.*
+
+---
+### 🎯 Mini MCQ Sheet:
+1. **What indicates a stationary ceiling on textbook graphs?**
+   - A) The curve plateaus smoothly
+   - B) Speed increases indefinitely
+   - *Correct Answer: A*
+2. **Which formula correctly captures standard rates?**
+   - A) Rate proportional to Concentration
+   - B) Rate constant at negative infinity
+   - *Correct Answer: A*`;
+  }
+
+  // Tier 5: Class 11 to 12 - Senior
+  return `# 🎓 Advanced Senior Notes: ${finalTopicName}
+*Class ${classNum} • Subject: ${subject} • Comprehensive University-Prep Syllabus*
+
+---
+### 🎯 1. Full Advanced Concept Explanation:
+Explore the theoretical mechanics of **${finalTopicName}** under intensive Class ${classNum} physics, chemistry, biology, or humanities standards. The molecular or foundational structure is dictated by thermodynamics, physical equilibrium, or structural trends.
+
+### 📐 2. Formula Sheet & Derivation:
+We start from the standard first principles under CBSE standards:
+$$\\oint_{S} \\mathbf{E} \\cdot d\\mathbf{A} = \\frac{Q_{\\text{enclosed}}}{\\epsilon_0}$$
+
+Integrating across a symmetrical coordinate frame, we derive:
+$$E = \\frac{\\sigma}{2\\epsilon_0} \\left(1 - \\frac{z}{\\sqrt{z^2 + R^2}}\\right)$$
+
+*Explanation*: As radius $R$ approaches infinity, field state $E$ simplifies to a constant sheet approximation, showcasing standard physics truths.
+
+---
+### 🧪 3. Step-by-Step Numerical Example:
+**Problem**: Calculate the net concentration variance if initial reagents dissolve at $0.05\\text{ M}$ under an equilibrium coefficient of $K_c = 4.2 \\times 10^{-3}$.
+1. **Step 1**: Formulate the quadratic expression: $\\frac{x^2}{0.05 - x} = K_c$.
+2. **Step 2**: Since $K_c$ is tiny, assume $0.05 - x \\approx 0.05$.
+3. **Step 3**: Re-arrange: $x^2 \\approx 0.05 \\times (4.2 \\times 10^{-3}) = 2.1 \\times 10^{-4}$.
+4. **Step 4**: Compute root: $x \\approx 1.45 \\times 10^{-2}\\text{ M}$.
+
+---
+### 💼 4. Case Study & Assertion-Reason:
+* **Assertion [A]**: The chemical rate coefficient doubles for every $10^{\\circ}\\text{C}$ rise.
+* **Reason [R]**: Molecules achieve vital activation energies more frequently with higher kinetic temperatures.
+* **Selection**: *Both [A] and [R] are true, and [R] provides the correct and precise explanation of [A].*
+
+---
+### 🏆 5. Exam revision Practice Prompts:
+- **Prompt**: Practice drafting this derivation three times on scratch sheets to secure perfect board marks!`;
 }
 
 export default function NotesGenerator({ onSaveWork }: NotesGeneratorProps) {

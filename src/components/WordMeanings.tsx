@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BookA, Sparkles, Loader2, Copy, Download, Check, Save } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { copyToClipboard, downloadTextFile } from "../utils";
+import { copyToClipboard, downloadTextFile, getClassLevelStyle } from "../utils";
 import { SavedWorkItem } from "../types";
 
 interface WordMeaningsProps {
@@ -11,41 +11,137 @@ interface WordMeaningsProps {
 function getLocalWordMeaning(word: string, classNum: string): string {
   const normWord = word.trim() || "Delightful";
   const syll = normWord.toLowerCase().split("").join("-");
+  const style = getClassLevelStyle(classNum);
 
-  return `# 📖 Classroom Dictionary Word: "${normWord}"
+  if (style.tier === "kinder") {
+    return `# 🎒 Fun Word Card: "${normWord}" 🎈
+*Class ${classNum} • Super Easy Kids Dictionary*
+
+### 🌟 Hey there little friend! Let's learn to say and spell: **"${normWord}"**
+
+- **How do we say it?** It is spelled like: **${syll}**! Say it open loud: *"We can read together!"*
+- **What does it mean?** It means something that is **very happy, warm, and fun to look at** (like a sweet red apple, a friendly yellow sun, or a little puppy dog tail wagging).
+- **Fun Example**: *"We had a really **${normWord}** afternoon drawing green trees in our school sketchbooks!"*
+
+---
+### 🎨 Kid's Active Worksheet Challenge:
+> **Fun Activity**: Write the word **"${normWord}"** three times on a clean white paper using your favorite blue or green colored crayons! ⭐`;
+  }
+
+  if (style.tier === "elementary") {
+    return `# 💡 Elementary Word Finder: "${normWord}"
+*Grade standard: Class ${classNum} • Simple Student Learner*
+
+### 📝 Definition and Primary Explanation:
+In Class ${classNum} worksheets, **"${normWord}"** describes any situation or quality that is highly creative, special, and makes school studies exciting.
+
+### ✍️ Fun Sentence Examples:
+- *Our science teacher gave us a **${normWord}** explanation of how little seeds grow into huge green trees!*
+- *It is very **${normWord}** to see how magnets pull iron paperclips closer together.*
+
+### ❓ 5 Basic Questions & Answers for Word Practice:
+1. **Q: Is "${normWord}" an action doing verb or a description adjective?**
+   - *A: It is usually a description word (adjective) that adds color to your essays.*
+2. **Q: What is a similar simple word for "${normWord}"?**
+   - *A: "Happy", "Lovely", or "Wonderful" represent excellent matches!*
+3. **Q: What is the opposite word?**
+   - *A: "Dull" or "Boring" show the exact opposite.*
+4. **Q: How can I spell it correctly in class tests?**
+   - *A: Remember: **${syll}**! Break it down into easy sounds.*
+5. **Q: What lesson example is in our books?**
+   - *A: Like the lovely processes found in *${style.examples[0]}*.*`;
+  }
+
+  if (style.tier === "middle") {
+    return `# 📖 Classroom Dictionary Word: "${normWord}"
 *Grade standard: Class ${classNum} • StudyMitra Vocabulary Companion*
 
 ---
-
-## 🔍 Structural Pronunciation & Type:
-- **Target Word**: **${normWord}**
-- **Syllables**: *${syll}*
-- **Grammar Part of Speech**: Noun / Verb / Adjective (Standard classroom context)
-
----
-
-## 💡 Core Meaning & Definition:
-In Class ${classNum} schoolwork, **${normWord}** describes a factor, element, or quality that is highly valuable, creative, interesting, and worth highlighting carefully. It represents an action or property that demonstrates structural clarity or is positive to learn.
+### 🔍 Pronunciation & Part of Speech:
+* **Target Word**: **${normWord}**
+* **Syllables**: *${syll}*
+* **Part of Speech**: Adjective / Noun / Verb (Grade-appropriate school context)
 
 ---
-
-## ✍️ Example Sentences:
-1. *The class teacher explained that incorporating the term **"${normWord}"** inside essays makes our writing much more professional.*
-2. *During our afternoon science discussion, we discovered a direct and **${normWord}** application of nature's laws.*
+### 💡 Core Classroom Meaning:
+At a Class ${classNum} standard, **${normWord}** describes factors or variables showing high value, cleanliness, or systematic design. It characterizes concepts that function perfectly under standard conditions.
 
 ---
+### ✍️ Simple Sentences:
+1. *The school assembly praised our creative team for delivering a **${normWord}** presentation on natural resource protection.*
+2. *During our lesson experiment, the indicator gave a clear, **${normWord}** shift in colors.*
 
-## 📋 Standard Synonyms & Antonyms:
+---
+### 📋 Synonyms & Antonyms:
 | Category | Synonyms (Similar Meaning) | Antonyms (Opposite Meaning) |
 | :--- | :--- | :--- |
-| **High Value** | Essential / Prominent / Clear | Unrelated / Confusing / Weak |
-| **Dynamic** | Productive / Active / Helpful | Static / Passive / Inactive |
+| **Common Use** | Excellent / Balanced / Neat | Confusing / Disorganized / Dull |
+| **Lesson Context** | Systematic / Productive | Random / Static / Inactive |
 
 ---
-
-## 🏆 Memory Study Mind Hack:
+### 🏆 Memory Revision Mind Hack:
 To memorize how to spell and write **"${normWord}"** perfectly on exam papers:
-> *Form an easy sentence connection in your worksheets, like: "My learnings about **${normWord}** remain clear, making my upcoming tests a joy to complete!"*`;
+> *Keep this visual target in mind: "Our answers are **${normWord}** because we follow systematic, bulleted points!"*`;
+  }
+
+  if (style.tier === "secondary") {
+    return `# 🎯 Board Exam-Focused Vocabulary: "${normWord}"
+*Class ${classNum} • Subject Terminology Master • CBSE / Academic Core*
+
+---
+### 🔍 Phonetic Transcription & Morphological Breakdown:
+- **Lexical Entry**: **${normWord}**
+- **Morphology**: Derived through base stem attachments.
+- **Syllabic division**: *${syll}*
+- **Syllabus Category**: High-frequency academic lexicon.
+
+---
+### 📋 Precise Contextual Definition:
+In high-school exams, the term **"${normWord}"** is deployed in literature, social studies, or scientific theories to qualify variables, arguments, or artistic movements that exhibit exquisite structure, cohesive logic, or remarkable utility.
+
+---
+### 🏆 Model Sentences (CBSE Word Usage Standards):
+1. *The writer's **${normWord}** utilization of parallel structures in the third act highlights historical societal changes.*
+2. *Scientists observed a **${normWord}** correlation between catalyst concentration adjustments and overall chemical velocity.*
+
+---
+### 📚 Synonyms, Antonyms, & Roots:
+* **Academic Synonyms**: Exquisite, exemplary, meritorious, highly structured.
+* **Academic Antonyms**: Superfluous, disordered, disjointed, chaotic.
+* **Root Origin**: Derived from classical Latin/Middle Germanic verbs signifying deep appreciation, structural balance, or logical cohesion.
+
+---
+### 🏋️ Practice Homework Prompt:
+> **Question (2 Marks)**: Construct a compound sentence containing the word **"${normWord}"** to describe a laboratory or social process. Check your spellings!`;
+  }
+
+  // Tier 5: Class 11-12 Senior
+  return `# 🎓 Advanced Senior Lexicon: "${normWord}"
+*Class ${classNum} • University-Prep Philology • Scholarly Glossary Tracker*
+
+---
+### 🎯 1. Philological and Semantic Analysis:
+An in-depth semantic mapping of **"${normWord}"** exposes nuanced layered contexts. In senior curriculum tracks (English Core, Classical Literature, or advanced humanities/science research), this word functions to annotate paradigms, methodologies, or philosophical tenets defined by flawless internal consistency.
+
+- **Syllabic Rhythm**: *${syll}*
+- **Register**: Formal, Academic, Literary, Scientific.
+
+---
+### 📐 2. Semantic Equations & Etymological Progression:
+- **Etymological Roots**: Traced to foundational frameworks of rational appreciation and structural utility.
+- **Systemic Model**:
+  $$\\text{Semantic Resonance} \\propto \\text{Register Specificity} \\times \\text{Contextual Precision}$$
+
+---
+### 💼 3. Analytical Scholarly Contexts & Board Usage:
+* **Literature Context**: *The critic scrutinized the prose, finding that the author's **${normWord}** attention to subtext elevated what would otherwise have been an elementary narrative into a profound allegory.*
+* **Scientific Research Context**: *The experimenters established a **${normWord}** system of controls, suppressing ambient friction and heat leakage to secure a clean, reproducible yield.*
+
+---
+### 🔬 4. Case Study & Assertion-Reason:
+* **Assertion [A]**: Utilizing diverse vocabulary like **"${normWord}"** enhances structural essay grading metrics.
+* **Reason [R]**: Advanced vocabulary choices establish a precise, professional register, signaling deep cognitive mastery to examiners.
+* **Selection**: *Both [A] and [R] are true, and [R] represents the correct conceptual reason for [A].*`;
 }
 
 export default function WordMeanings({ onSaveWork }: WordMeaningsProps) {

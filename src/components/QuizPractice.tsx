@@ -1,69 +1,212 @@
 import { useState } from "react";
 import { BrainCircuit, Loader2, RefreshCw, CheckCircle2, XCircle, ArrowRight, Award, Copy, Download, Sparkles } from "lucide-react";
 import { QuizQuestion } from "../types";
-import { copyToClipboard, downloadTextFile } from "../utils";
+import { copyToClipboard, downloadTextFile, getClassLevelStyle } from "../utils";
 
 function getLocalQuiz(classNum: string, subject: string): any[] {
+  const style = getClassLevelStyle(classNum);
+
+  if (style.tier === "kinder") {
+    return [
+      {
+        id: 1,
+        question: "🌻 Which big, bright yellow object shines in the sky during the daytime?",
+        options: ["The warm golden Sun", "The cold silver Moon", "A tiny blinking star", "A big blue raincloud"],
+        correctAnswer: "The warm golden Sun",
+        explanation: "The Sun is our beautiful golden star that gives us light to play outdoors all day!"
+      },
+      {
+        id: 2,
+        question: "🐶 What sound does a happy little puppy make when playing with you?",
+        options: ["Woof woof!", "Meow meow!", "Quack quack!", "Moo moo!"],
+        correctAnswer: "Woof woof!",
+        explanation: "Puppies bark happily to show they want to play and chase balls with you!"
+      },
+      {
+        id: 3,
+        question: "🍎 What is the color of a sweet, juicy red apple?",
+        options: ["Bright Red", "Ocean Blue", "Dark Purple", "Shiny Black"],
+        correctAnswer: "Bright Red",
+        explanation: "Apples are delicious fruits that are usually bright red, sweet, and healthy to chew!"
+      },
+      {
+        id: 4,
+        question: "🖐️ How many fingers do you have on your one hand?",
+        options: ["Five fingers", "Ten fingers", "Two fingers", "Twenty fingers"],
+        correctAnswer: "Five fingers",
+        explanation: "Show your hand and count: 1, 2, 3, 4, 5! You have five little fingers!"
+      },
+      {
+        id: 5,
+        question: "🎨 What is a fun activity to make your homework look colorful?",
+        options: ["Using crayons or colored pencils nicely", "Closing your books forever", "Spilling water on worksheets", "Throwing pencils away"],
+        correctAnswer: "Using crayons or colored pencils nicely",
+        explanation: "Coloring your workbook pages neat makes learning extremely fun and beautiful!"
+      }
+    ];
+  }
+
+  if (style.tier === "elementary") {
+    return [
+      {
+        id: 1,
+        question: `Which helper pulls iron nails and paperclips close to it automatically?`,
+        options: ["A shiny magnet", "A wooden school ruler", "A plastic water bottle", "A piece of soft paper"],
+        correctAnswer: "A shiny magnet",
+        explanation: "Magnets possess magnetic fields that grab iron objects from short distances!"
+      },
+      {
+        id: 2,
+        question: `What primary role do green leaves play for a plant?`,
+        options: ["Preparing healthy food using sunlight", "Holding the plant strong in soil", "Carrying muddy water from roots", "Attracting soil butterflies"],
+        correctAnswer: "Preparing healthy food using sunlight",
+        explanation: "Leaves acts as food kitchens for plants, capturing sunlight to make simple sugars!"
+      },
+      {
+        id: 3,
+        question: "Which of these is a great practice to scores good marks on routine tests?",
+        options: ["Solving 5-question mini MCQs and reviewing brief definitions", "Playing computer games all night before exams", "Skipping complex school formulas", "Cramming answers without reading definitions"],
+        correctAnswer: "Solving 5-question mini MCQs and reviewing brief definitions",
+        explanation: "Active recall simulates the real classroom environment and builds sweet long-term memory!"
+      },
+      {
+        id: 4,
+        question: "What state of matter is the drinking water in your bottle?",
+        options: ["Liquid state", "Solid ice state", "Hot steam gas state", "Plasmatic fire state"],
+        correctAnswer: "Liquid state",
+        explanation: "Water flows easily because its particles are loose, characterizing it as a liquid."
+      },
+      {
+        id: 5,
+        question: "Why does leaving salty water under hot sunshine leave white powder in a bowl?",
+        options: ["Because the liquid water evaporates, leaving salt crystals behind", "Because the sun makes new salt particles", "Because dust settles in the bowl", "Because salt water changes to white sugar"],
+        correctAnswer: "Because the liquid water evaporates, leaving salt crystals behind",
+        explanation: "Solar heat evaporates the liquid water, causing the heavier salt solutes to crystallize!"
+      }
+    ];
+  }
+
+  if (style.tier === "middle") {
+    return [
+      {
+        id: 1,
+        question: `In Class ${classNum} ${subject}, which organelle is considered the 'Powerhouse of the Cell'?`,
+        options: ["Mitochondria", "Chloroplast", "Nucleus", "Ribosome"],
+        correctAnswer: "Mitochondria",
+        explanation: "Mitochondria perform cellular respiration, releasing chemical ATP energy for vital functions."
+      },
+      {
+        id: 2,
+        question: `What fundamental force resists relative sliding between two physical surfaces in contact?`,
+        options: ["Friction Force", "Gravitational Attraction", "Magnetic Repulsion", "Electrostatic Charge"],
+        correctAnswer: "Friction Force",
+        explanation: "Frictional resistance acts opposite to the direction of motion, dependent on surface roughness."
+      },
+      {
+        id: 3,
+        question: "What gas is primarily consumed by plants during standard photosynthesis cycles?",
+        options: ["Carbon Dioxide", "Oxygen", "Nitrogen Gas", "Helium"],
+        correctAnswer: "Carbon Dioxide",
+        explanation: "Plants absorb ambient Carbon Dioxide to construct standard carbohydrate structures, releasing oxygen."
+      },
+      {
+        id: 4,
+        question: "Which term describes a substance that speeds up a chemical process without being consumed?",
+        options: ["Catalyst", "Solvent", "Reactant", "Inhibitor"],
+        correctAnswer: "Catalyst",
+        explanation: "Catalysts reduce the thermodynamic activation barrier, increasing reaction velocities."
+      },
+      {
+        id: 5,
+        question: "What is the primary indicator of an acidic liquid on blue litmus indicators?",
+        options: ["The blue litmus turns red", "The lithium changes to deep blue", "The indicator turns transparent", "The liquid starts boiling instantly"],
+        correctAnswer: "The blue litmus turns red",
+        explanation: "Acidic compounds contain free hydronium ions ($H^+$) which turn standard blue litmus indicators red."
+      }
+    ];
+  }
+
+  if (style.tier === "secondary") {
+    return [
+      {
+        id: 1,
+        question: `According to secondary CBSE Class ${classNum} standards, what is the chemical formula of rust?`,
+        options: ["Fe2O3 · xH2O", "FeO", "Fe(OH)2", "Fe3O4"],
+        correctAnswer: "Fe2O3 · xH2O",
+        explanation: "Rusting of iron molecules represents an oxidation process forming hydrated ferric oxides."
+      },
+      {
+        id: 2,
+        question: `If an object is placed at the Focus (F) of a concave mirror, where is the final image formed?`,
+        options: ["At Infinity", "At the Center of Curvature", "Between Focus and Pole", "At the Focus itself"],
+        correctAnswer: "At Infinity",
+        explanation: "Light rays emerging from focal points reflect parallelly, creating a highly magnified image at infinity."
+      },
+      {
+        id: 3,
+        question: "What is the mathematical formulation of Ohm's Law governing electrical circuits?",
+        options: ["V = I × R", "I = V × R", "R = V × I", "P = V × I / R"],
+        correctAnswer: "V = I × R",
+        explanation: "Ohm's law states that electrical potential difference is directly proportional to loop current under constant temperatures."
+      },
+      {
+        id: 4,
+        question: "Which of the following organic structures contains a triple covalent bond?",
+        options: ["Alkyne", "Alkane", "Alkene", "Alcohol"],
+        correctAnswer: "Alkyne",
+        explanation: "Alkynes represent unsaturated hydrocarbons with a triple-bonded carbon pair (formula CnH2n-2)."
+      },
+      {
+        id: 15,
+        question: "In standard genetics, what represents the classic phenotypic ratio of a Mendelian dihybrid cross?",
+        options: ["9:3:3:1", "3:1", "1:2:1", "1:1:1:1"],
+        correctAnswer: "9:3:3:1",
+        explanation: "Independent assortment of two separate genes results in a predictable 9:3:3:1 ratio in the F2 generation physical traits."
+      }
+    ];
+  }
+
+  // Tier 5: Class 11-12 - Senior
   return [
     {
       id: 1,
-      question: `Which of the following is a key foundational concept in Class ${classNum} ${subject}?`,
-      options: [
-        "The primary core curriculum standard",
-        "A completely unrelated theory",
-        "An advanced university-level equation",
-        "A random guesswork answer"
-      ],
-      correctAnswer: "The primary core curriculum standard",
-      explanation: `At a Class ${classNum} level, focusing on the primary curriculum of ${subject} ensures you build rich, lasting mastery.`
+      question: "Which of these is the correct thermodynamic statement for a spontaneous reaction at constant temperature and pressure?",
+      options: ["ΔG < 0 (Negative Gibbs Free Energy)", "ΔG > 0 (Positive Gibbs Free Energy)", "ΔS_universe = 0", "ΔH = 0 (Isothermal Enthalpy)"],
+      correctAnswer: "ΔG < 0 (Negative Gibbs Free Energy)",
+      explanation: "For a real reaction to proceed spontaneously spontaneously, the change in net Gibbs Free Energy (ΔG = ΔH - TΔS) must be negative."
     },
     {
       id: 2,
-      question: `What is highly recommended when completing homework tasks for ${subject}?`,
+      question: "[Assertion [A]]: Electromagnetic waves transfer both kinetic momentum and energy across vacuum spaces. \n[Reason [R]]: EM waves possess electric and magnetic field vectors oscillating perpendicularly. Identify the correct relationship:",
       options: [
-        "Breaking problems into direct steps and writing key terminologies",
-        "Leaving your textbook completely unread",
-        "Cramming formula sheets the night before without understanding",
-        "Copying your classmate's sheets exactly"
+        "Both [A] and [R] are true, and [R] is the correct explanation of [A]",
+        "Both [A] and [R] are true, but [R] is NOT the correct explanation of [A]",
+        "[A] is true but [R] is false",
+        "Both [A] and [R] are completely false statements"
       ],
-      correctAnswer: "Breaking problems into direct steps and writing key terminologies",
-      explanation: "Organizing your worksheets step-by-step activates deep memory and yields maximum standard grades!"
+      correctAnswer: "Both [A] and [R] are true, and [R] is the correct explanation of [A]",
+      explanation: "Since electromagnetic waves comprise real oscillating power fields, they carry radiation pressure, transporting momentum and energy."
     },
     {
       id: 3,
-      question: "Which of these is the most effective approach to revise for standard school tests?",
-      options: [
-        "Reading summarized cards, active testing, and solving mini MCQs",
-        "Continuous rereading of a single paragraph without attention",
-        "Waiting until final hour of examinations to study",
-        "Skipping all definitions that look difficult"
-      ],
-      correctAnswer: "Reading summarized cards, active testing, and solving mini MCQs",
-      explanation: "Retrieving study info through quizzes simulates core recall, which is prime exam preparation."
+      question: "A uniform solid disk of mass M and radius R rolls without slipping down a 30-degree incline. What is its linear acceleration?",
+      options: ["(2/3) g sin(30°)", "(1/2) g sin(30°)", "g sin(30°)", "((3/4) g sin(30°))"],
+      correctAnswer: "(2/3) g sin(30°)",
+      explanation: "Solid disks have a rotational inertia of I = (1/2)MR^2. Accounting for both rotational and translation kinetic blocks, linear acceleration is derived as a = (g sin θ) / (1 + I/MR^2) = (2/3) g sin θ."
     },
     {
       id: 4,
-      question: `In Class ${classNum}, what should a student do if they face a complex doubt in ${subject}?`,
-      options: [
-        "Discuss with class peers or ask your teacher for guidance",
-        "Fold the textbook and stop learning that chapter",
-        "Write down a random default answer in your exams",
-        "Postpone standard revision permanently"
-      ],
-      correctAnswer: "Discuss with class peers or ask your teacher for guidance",
-      explanation: "Asking questions removes blockages and keeps your educational pathway continuous and exciting."
+      question: "In advanced calculus physics, what is the divergence of any static magnetic field vector according to Maxwell's Equations?",
+      options: ["Zero (No magnetic monopoles exist)", "Free current density (μ0 J)", "Rate of change of electric field", "Negative charge density divided by vacuum permittivity"],
+      correctAnswer: "Zero (No magnetic monopoles exist)",
+      explanation: "The divergence of the magnetic flux density (div B = 0) is Gauss's Law for Magnetism, meaning magnetic field loops are always continuous."
     },
     {
       id: 5,
-      question: "How does StudyMitra / Student Helper Hub assist daily school prep?",
-      options: [
-        "By offering instant summaries, answer solvers, and custom schedules",
-        "By writing and signing formal exam sheets on your behalf",
-        "By physical delivery of school board notebooks",
-        "By deleting your teacher's assignment checklists"
-      ],
-      correctAnswer: "By offering instant summaries, answer solvers, and custom schedules",
-      explanation: "StudyMitra is an excellent companion that structures homework files, meaning finders, and plans safely."
+      question: "What product is primarily synthesized when phenol molecules undergo the classical Kolbe-Schmitt reaction with CO2 under high pressure?",
+      options: ["Salicylic Acid (o-hydroxybenzoic acid)", "Aspirin", "Benzoic Acid", "Picric Acid"],
+      correctAnswer: "Salicylic Acid (o-hydroxybenzoic acid)",
+      explanation: "Kolbe-Schmitt is a typical electrophilic carboxylation of sodium phenoxide with Carbon Dioxide, forming Salicylic acid."
     }
   ];
 }

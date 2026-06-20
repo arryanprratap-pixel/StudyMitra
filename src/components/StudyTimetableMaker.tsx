@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CalendarRange, Sparkles, Loader2, Copy, Download, Check, Save } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { copyToClipboard, downloadTextFile } from "../utils";
+import { copyToClipboard, downloadTextFile, getClassLevelStyle } from "../utils";
 import { SavedWorkItem } from "../types";
 
 interface StudyTimetableMakerProps {
@@ -13,31 +13,133 @@ function getLocalTimetable(schoolTime: string, subjects: string, classNum: strin
   const finalSubs = subjects.trim() || "Science, Mathematics, Social Studies";
   const primarySubject = finalSubs.split(",")[0] || "Major Subjects";
   const secondarySubject = finalSubs.split(",")[1] || "Revision Core";
+  const style = getClassLevelStyle(classNum);
 
-  return `# 🗓️ Class-Calibrated Personal Study Timetable
-*Tailored for Class ${classNum} • School Hours: ${normTime} • Local Calibration Mode*
+  if (style.tier === "kinder") {
+    return `# 🗓️ Cute & Fun Daily Chart! 🎈
+*Tailored for Class ${classNum} • Kindergarten Friendly Timetable*
 
-Here is your highly custom, balanced, and productive daily schedule built to cover **${finalSubs}** while securing healthy rest, hobbies, and sports!
+Hi little friends! Here is a happy, colorful chart to plan your perfect day! Look at all the fun activities and games you can participate in!
 
-| Time Slot | Scheduled Focus | Quick Tips & Goals |
+| Time Slot | What we will do! | Fun Helper Tips ⭐ |
 | :--- | :--- | :--- |
-| **07:00 AM - 08:00 AM** | Wake Up & School Prep☀️ | Stretch, drink warm waters, and eat a healthy breakfast! |
-| **08:00 AM - 02:00 PM** | Academic School Hours 🏫 | Focus carefully on live explanations and clarify your doubts during active hours. |
-| **02:00 PM - 03:00 PM** | Return Home & Lunch Break 🍽️ | Enjoy a nutritious hot lunch and rest your mind. |
-| **03:00 PM - 04:00 PM** | Hobby Play & Sports Activity ⚽ | Unwind! Go outdoors, draw sketchbooks, or ride bikes. |
-| **04:00 PM - 05:00 PM** | **Self-Study Block 1: Homework Tasks** 📝 | Prioritize **${primarySubject}** tasks. Clear up assignment lists! |
-| **05:00 PM - 05:30 PM** | Healthy Refreshment Break 🥛 | Enjoy milk or orange fruits to re-energize. |
-| **05:30 PM - 06:30 PM** | **Self-Study Block 2: Chapter Study** 📚 | Revision focus on **${secondarySubject}**. Memorize glossary lists. |
-| **06:30 PM - 07:15 PM** | Interactive Quiz / Self-Review 🎯 | Play 1 mini practice MCQ session to check your recall. |
-| **07:15 PM - 08:30 PM** | Screen Time / Family Talk 📺 | Relax with your brothers, sisters, and parents. |
-| **08:30 PM - 09:15 PM**| Calming Family Dinner 🍲| Enjoy clean food and pack your school bag for tomorrow. |
-| **09:15 PM - 09:30 PM**| Wash & Ready for Bed 🦷| Brush teeth, shut electronic screen displays, and relax. |
-| **09:30 PM - 07:00 AM**| Sweet Rest Sleep Block 😴| Secure a full 9-hour restorative sleep to stay glowing! |
+| **07:30 AM - 08:00 AM** | Rise & Shine! 🌅 | Brush your teeth, comb your hair, and eat sweet apples! |
+| **08:00 AM - 01:00 PM** | Fun School/Learning Hours 🎒 | Listen to the teacher, play with letters, and share crayons! |
+| **01:00 PM - 02:00 PM** | Delicious Yummy Lunch 🥛 | Drink milk and eat fresh lunches. |
+| **02:00 PM - 03:00 PM** | Cozy Afternoon Nap Time 😴 | Lock your eyes and sleep softly with teddy bears. |
+| **03:00 PM - 04:30 PM** | Outdoor Play & Coloring Game 🎨 | Draw ${style.examples[0]} using warm yellow! |
+| **04:30 PM - 05:00 PM** | Little Lessons study block (15 min) 📝 | Read 3 lines of basic words with your helper. |
+| **05:00 PM - 06:30 PM** | Toys & Family Fun Time 🧸 | Play games and wash your hands. |
+| **06:30 PM - 07:30 PM** | Clean Dinner Time 🍲 | Enjoy warm soup and clear your toys nicely. |
+| **07:30 PM - 08:00 PM** | Hear a Bedtime Story 📖 | Read a highly interesting baby book! |
+| **08:00 PM - 07:30 AM** | Sweet Dreams 🌙 | Rest for a robust 11 hours to wake up super happy! |
 
 ---
+### ⭐ Happy Teacher Message:
+> "Learning is just like playing block games! Stay smiling, count your shiny stars, and give your mom a massive hug!"`;
+  }
 
-### 🏆 Study Counselor Advisory:
-> "Dear Class ${classNum} student, consistency represents your main key! Study in short, focused blocks of 20-30 minutes, and reward yourself with a little stretch or water after every session. You possess the direct strength to achieve your absolute highest goals!"`;
+  if (style.tier === "elementary") {
+    return `# 💡 Elementary Study Timetable
+*Tailored for Class ${classNum} • School Hours: ${normTime} • Easy Balanced Routine*
+
+Hi there! In Class ${classNum}, we need simple study blocks (20-30 min) mixed with plenty of hydration, play, and rest.
+
+| Time Slot | Scheduled Focus | Easy Student Goal |
+| :--- | :--- | :--- |
+| **07:00 AM - 08:00 AM** | Morning Prep & Breakfast ☀️ | Eat well and inspect your worksheet check-lists. |
+| **08:00 AM - 02:00 PM** | School Hours 🏫 | Write neat definitions and try to ask 1 smart question! |
+| **02:00 PM - 03:00 PM** | Return & Lunch Break 🍽️ | Rest your brain and discuss your school day. |
+| **03:00 PM - 04:30 PM** | Sports & Play Area Activity ⚽ | Ride your scooter or play with your class peers! |
+| **04:30 PM - 05:15 PM** | **Self-Study Block 1 (Homework)** 📝 | Finish worksheets for **${primarySubject}** step-by-step. |
+| **05:15 PM - 05:45 PM** | Fruit Juice & Water Break 🥛 | Recharge with healthy food! |
+| **05:45 PM - 06:30 PM** | **Self-Study Block 2 (Revision)** 📚 | Simple review of **${secondarySubject}** concepts. |
+| **06:30 PM - 07:00 PM** | Creative Crafts or Reading 📖 | Read 1 brief review card or practice drawing circles. |
+| **07:00 PM - 08:30 PM** | Family Conversation & Screen 📺 | Relax and share thoughts. |
+| **08:30 PM - 09:15 PM** | Dinner & Bed Prep 🍲 | Pack your pencils and school books properly. |
+| **09:15 PM - 07:00 AM** | Sweet Rest & Sleep 😴 | Secure a beautiful, healthy 9-hour rest! |
+
+---
+### 🏆 Easy Revision Tip:
+> "Divide your homework into 5 small tasks. Tick off each circle as you finish! This builds amazing confidence for great marks!"`;
+  }
+
+  if (style.tier === "middle") {
+    return `# 🗓️ Middle-School Study Timetable
+*Tailored for Class ${classNum} • Active Syllabus Plan • School Hours: ${normTime}*
+
+This middle-grade schedule is optimized to support standard subjects with disciplined self-learning, active testing, and healthy recreations.
+
+| Time Slot | Scheduled Focus | Primary Action Key |
+| :--- | :--- | :--- |
+| **06:45 AM - 07:45 AM** | Wake Up & Breakfast ☀️ | Hydrate, pack homework sheets, and prepare. |
+| **07:45 AM - 02:00 PM** | Classroom Core Hours 🏫 | Review important points, summaries, and note formulas. |
+| **02:00 PM - 03:00 PM** | Travel Home & Lunch 🍽️ | Nutritious meals to refuel. |
+| **03:00 PM - 04:00 PM** | Athletics / Hobbies ⚽ | Exercise to relax mind stress. |
+| **04:00 PM - 05:15 PM** | **Self-Study Session (Homework)** 📝 | Solve tasks for **${primarySubject}**. |
+| **05:15 PM - 05:45 PM** | Light Healthy Refreshments 🥛 | Refresh your workspace layout. |
+| **05:45 PM - 07:00 PM** | **Syllabus Deep-Dive (Revision)** 📚 | Focus on **${secondarySubject}** definitions and diagrams. |
+| **07:00 PM - 07:30 PM** | Quick Self-Testing Quiz 🎯 | Run 5 interactive MCQs on StudyMitra to check memory. |
+| **07:30 PM - 08:45 PM** | Leisure Time with Family 📺 | Relax and unwind. |
+| **08:45 PM - 09:30 PM** | Dinner and Preparation 🍲 | Pack files, worksheets, and schedule for tomorrow. |
+| **09:30 PM - 06:45 AM** | Healthy Sleep Period 😴 | Get 9 full hours of sleep to stay alert. |
+
+---
+### 📋 Counselor Guidance:
+* Prioritize high-priority tasks during Study block 1.
+* Study with soft yellow lights or simple background music to improve attention!`;
+  }
+
+  if (style.tier === "secondary") {
+    return `# 🎯 CBSE Board-Exam Study Timetable
+*Advanced Secondary Schedule • Class ${classNum} Prep Matrice • School Hours: ${normTime}*
+
+To score excellent CGPA marks in Classes 9 and 10 and excel under high curriculum syllabus boards, use this rigorous topic-by-topic timetable which utilizes the Pomodoro technique.
+
+| Time Slot | Intended Focus | CBSE Preparation Matrix |
+| :--- | :--- | :--- |
+| **06:00 AM - 07:00 AM** | **Early Morning Formulas Booster** ⚙️ | Memorize highly crucial equations and chemical structures. |
+| **07:00 AM - 08:00 AM** | Refresh & Travel to School 🚌 | Clear thoughts for standard class quizzes. |
+| **08:00 AM - 02:05 PM** | Academic School Session 🏫 | Take precise board syllabus notes and highlight key definitions. |
+| **02:05 PM - 03:00 PM** | Return Home, Decompress, Lunch 🍽️ | Healthy diet with rich protein structures. |
+| **03:00 PM - 04:00 PM** | Physical Sports or Fitness 🏃 | Run, swim, or stretch to boost oxygen-saturated levels. |
+| **04:00 PM - 05:30 PM** | **Intensive Practice (Self-Study 1)** 📝 | Solve complex numerics or derivations representing **${primarySubject}**. |
+| **05:30 PM - 06:00 PM** | Healthy Food & Workspace Setup 🥛 | Set up a tidy yellow/green academic background. |
+| **06:00 PM - 07:30 PM** | **Theoretical Mastery (Self-Study 2)** 📚 | Formulate short answers and summaries for **${secondarySubject}**. |
+| **07:30 PM - 08:00 PM** | PYQ Practice & Timed Tests 🎯 | Focus on previous-year exam papers under 30-min timers. |
+| **08:00 PM - 09:15 PM** | Family Connections & Relax | Disconnect from internet screen displays. |
+| **09:15 PM - 09:45 PM** | Dinner & Task Sheet Audit 🍲 | Confirm all target homework lines are ticked off. |
+| **09:45 PM - 06:00 AM** | Restorative Sleep Block 😴 | Unlocks complete mental alignment and memory capacity. |
+
+---
+### 🏆 Secondary Board Secret:
+> "Under CBSE grading curves, structured layout and clear definitions decide your margins. Practice drawing three-stage flowcharts for a flawless 100/100 scorecard!"`;
+  }
+
+  // Tier 5: Class 11-12 - Senior
+  return `# 🎓 Advanced Senior Entrance-Exam Study Timetable
+*Class ${classNum} University-Prep Routine • High-Intensity JEE/NEET/Board Division*
+
+Preparing for Class Classes 11 and 12 and university-level competitive portals demands robust, self-authoritative schedules. This rigorous split allocates focused study blocks with step-by-step mathematical derivation windows, case-study review sessions, and regular mental recovery periods.
+
+| Time Slot | Session Focus | Advanced Academic Execution |
+| :--- | :--- | :--- |
+| **05:30 AM - 07:00 AM** | **Theoretical Derivations & Axioms** 📐 | Derivations of Maxwell's field equations, physical equilibrium, or advanced math theorems. |
+| **07:00 AM - 08:00 AM** | Morning Routine & Nutrients Intake 🍊 | High-energy breakfast with fresh, raw fruits. |
+| **08:00 AM - 02:00 PM** | School/Coaching Lecture Block 🏫 | Annotate syllabus keywords and record analytical lecture recordings. |
+| **02:00 PM - 03:00 PM** | Return, Nourishing Lunch, Rest 🍽️ | Horizontal mental rest for 30 minutes to cool active neurons. |
+| **03:00 PM - 04:00 PM** | Cardiovascular Exercise / Walk 🏃 | Aerobic exercise to eliminate physical lethargy. |
+| **04:00 PM - 06:30 PM** | **Primary Problem Solver (Self-Study 1)** 🧪 | Deductive step-by-step calculus numericals and complex problems in **${primarySubject}**. |
+| **06:30 PM - 07:00 PM** | Mind Sync & Healthy Fluid Intake ☕ | Drink green tea or warm cocoa; review plan sheets. |
+| **07:00 PM - 09:00 PM** | **Secondary Advanced Review (Self-Study 2)** 📚 | Conceptual reading and assertion-reason exercises in **${secondarySubject}**. |
+| **09:00 PM - 09:45 PM** | Solitary Walk / Family Dinner 🍲 | Detach from electronic device monitors. |
+| **09:45 PM - 10:30 PM** | PYQ Mock papers & Revision 🎯 | Solve complete timed section sheets to perfect response velocities. |
+| **10:30 PM - 05:30 AM** | Deep Anabolic Sleep 😴 | Absolute 7-hour restful recovery cycle for deep synaptic consolidation. |
+
+---
+### 🧪 Senior Advisory:
+$$\\text{Synaptic Memory} \\propto \\frac{\\text{Focused Revision Cycles}}{\\text{Mental Fatigue (Stress)}}$$
+> "Your capacity is defined by your consistency. Practice deriving standard equations without looking at text keys at least once a week!"`;
 }
 
 export default function StudyTimetableMaker({ onSaveWork }: StudyTimetableMakerProps) {

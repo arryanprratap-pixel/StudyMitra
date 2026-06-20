@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Bookmark, Sparkles, Loader2, Copy, Download, Check, Save } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { copyToClipboard, downloadTextFile } from "../utils";
+import { copyToClipboard, downloadTextFile, getClassLevelStyle } from "../utils";
 import { SavedWorkItem } from "../types";
 
 interface BookReviewMakerProps {
@@ -12,27 +12,118 @@ function getLocalBookReview(title: string, author: string, genre: string, keyPoi
   const cleanTitle = title.trim() || "The Great Adventure";
   const cleanAuthor = author.trim() || "Anonymous School Teacher";
   const cleanPoints = keyPoints.trim() || "Perseverance, daily kindness, and regular reading habits.";
-  
-  return `# 📖 School Book Review: "${cleanTitle}"
-*Reviewed for Class ${classNum} • Genre: ${genre} • Author: ${cleanAuthor} • Local Calibration Mode*
+  const style = getClassLevelStyle(classNum);
 
-## 📝 Plot & What Book is About:
-The fascinating book **"${cleanTitle}"** written by ${cleanAuthor} is a captivating story set in a world filled with exciting learnings and dynamic characters. The major themes address growing up, solving daily problems, and finding unique answers when times are difficult.
+  if (style.tier === "kinder") {
+    return `# 🎒 Playful Book Record: "${cleanTitle}" 🎈
+*Reviewed for Class ${classNum} • Easy Child-Friendly Mode*
 
-## 🌟 My Favorite Aspects:
-Our favorite parts of the book are the interactive character arcs and how the lessons translate to daily life. The primary takeaways celebrate:
-- **${cleanPoints}**
+### 🌟 Hi little kids! Let's talk about our fun book:
+We read a really happy book called **"${cleanTitle}"** by **${cleanAuthor}**!
 
-The narrative is structured with extremely direct and friendly chapters that keep students of Class ${classNum} thoroughly engaged from start to tail!
+- **What is it about?** It is a lovely story about ${genre} where nice friends solve happy little mysteries together!
+- **Did you know?** ${style.examples[0]}!
+- **Special takeaway**: *${cleanPoints}*.
 
-## 🎓 My Learnings & Moral of the Story:
-1. Working together with school friends always resolves difficult workspace trials.
-2. We must never feel afraid of initial errors, but rather use them as guideposts.
-3. Reading standard books expands our creativity and makes our answers look neat!
+---
+### 🎨 Color & Play Activity:
+> **Fun Homework Craft**: Draw a smiling face of your favorite helper in this book using your bright yellow crayons! Show it to your teacher next class! ⭐`;
+  }
 
-## ⭐ My Rating & Recommendation:
-- **School Rating**: ⭐⭐⭐⭐⭐ (5 / 5 Stars)
-- **Recommendation**: This represented a truly helpful book for any Class ${classNum} reference workbook.`;
+  if (style.tier === "elementary") {
+    return `# 💡 Elementary Book Review: "${cleanTitle}"
+*Reviewed for Class ${classNum} • Genre: ${genre} • Author: ${cleanAuthor}*
+
+### 📋 Simple Story Overview:
+The lovely book **"${cleanTitle}"** written by **${cleanAuthor}** is an easy story about how we find solutions to daily school and family challenges.
+
+### 🔑 Primary Learning Points:
+- Examples of the theme include: *${style.examples[0]}*.
+- The main characters teach us to be resilient and helpful.
+- **My Notes**: *${cleanPoints}*.
+
+### ❓ 5 Basic Questions & Direct Answers:
+1. **Q: Who wrote this amazing book?**
+   - *A: It was written by ${cleanAuthor}.*
+2. **Q: What is the main moral?**
+   - *A: Always show kindness and seek creative answers.*
+3. **Q: Is the language easy to read?**
+   - *A: Yes, it uses short paragraphs and simple words!*
+4. **Q: What is a typical example of lessons in the book?**
+   - *A: Like ${style.examples[1]}.*
+5. **Q: Would you recommend this to classmates?**
+   - *A: Yes, it is very interesting and teaches good manners!*`;
+  }
+
+  if (style.tier === "middle") {
+    return `# 📖 School Book Review: "${cleanTitle}"
+*Class ${classNum} • Genre: ${genre} • Author: ${cleanAuthor} • Middle Grade standard*
+
+### 📋 Plot Summary:
+The fascinating book **"${cleanTitle}"** by **${cleanAuthor}** explores standard themes of friendship, community values, and creative problem-solving in a ${genre} setting.
+
+### 🔑 Important Narrative Points:
+* Direct plot loops keep readers engaged throughout the chapters.
+* Characters rely on active communications to defeat complex hurdles.
+* Core takeaway emphasizing: *${cleanPoints}*.
+
+### 📚 Essential Moral Lessons:
+- **Lesson 1**: Cooperation is key when tackling tricky obstacles.
+- **Lesson 2**: Small everyday acts of help expand into great solutions.
+- **Everyday Case**: *${style.examples[0]}*.
+
+---
+### ⭐ School Grade Recommendation:
+* **My Rating**: ⭐⭐⭐⭐⭐ (5/5 Stars!)
+* **Ideal Reader**: Perfect for Class ${classNum} kids looking to boost their workbook language skills!`;
+  }
+
+  if (style.tier === "secondary") {
+    return `# 🎯 Exam-Focused Book Review: "${cleanTitle}"
+*Class ${classNum} • Genre: ${genre} • Writer: ${cleanAuthor} • Board Syllabus Standard*
+
+---
+### 📋 Detailed Literary Summary:
+In high-school analytical studies, **"${cleanTitle}"** represents a major text within the **${genre}** category. The author uses precise narrative techniques to critique socioeconomic trends, human behaviors, or historical transitions.
+
+### 🔍 Core Structural Elements & Literary Devices:
+- **Symbolism**: The setting represents an arena of growth.
+- **Core Protagonist Drive**: Facing conflicts guided by the key principle: *${cleanPoints}*.
+- **Narrative Arc**: Follows a classic five-act transition from rising conflict to climax and resolution.
+
+---
+### 🏆 3 Essential Board Exam Style Discussion Points:
+1. **Q: Analyze the central theme of ${cleanTitle} in detail. (3 Marks)**
+   - *Answer: The central theme explores how characters transform through adversity. It highlights critical concepts like: (i) Individual moral responsibilities, and (ii) Finding systematic answers in community bonds.*
+2. **Q: How does the author utilize the setting to enhance the climax? (4 Marks)**
+   - *Answer: The setting acts as an active antagonist (e.g., simulating storms or barriers like ${style.examples[1]}), pushing the protagonist to absolute limits.*
+3. **Q: Contrast the subplots with the main narrative line. (3 Marks)**
+   - *Answer: The main storyline addresses structural growth, whereas the secondary subplot humanizes character relationships and provides comic relief.*`;
+  }
+
+  // Tier 5: Class 11-12 Senior
+  return `# 🎓 Advanced Critical Book Analysis: "${cleanTitle}"
+*Class ${classNum} • Genre: ${genre} • Author: ${cleanAuthor} • University-Prep Literature*
+
+---
+### 🎯 1. Structuralism and Literary Criticism:
+This advanced analysis dissects the post-modernist or traditional narrative schemas embedded in **"${cleanTitle}"** by **${cleanAuthor}**. The text explores complex psychological frameworks, ontological struggles, or systemic societal dynamics.
+
+### 🔬 2. Advanced Character Motifs & Thematic Axioms:
+- **Thematic Core**: Critical values: *${cleanPoints}*.
+- **Socio-Political Resonance**: The conflict serves as an allegory for structural power differences and existential growth.
+- **Analytical Matrix**:
+  $$\\text{Thematic Tension} \\propto \\frac{\\text{Internal Desires of Protagonist}}{\\text{External Societal Constraints}}$$
+
+---
+### 💼 3. Analytical Case Study / Passage Context:
+* **Assertion [A]**: The protagonist's ultimate concession mirrors classic tragic paradigms in literature.
+* **Reason [R]**: The author deliberately orchestrates a pyrrhic victory to highlight the immutable boundaries of the setting.
+* **Selection**: *Both [A] and [R] are true and [R] provides the correct ontological reasoning behind [A].*
+
+---
+### ⭐ Critical Scholarly Recommendations:
+- **Scholarly Rating**: 4.8 / 5.0 (Highly recommended for Board prep and college-level literary analyses).`;
 }
 
 export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
