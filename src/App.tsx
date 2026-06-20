@@ -35,6 +35,7 @@ import SavedWork from "./components/SavedWork";
 import WordMeanings from "./components/WordMeanings";
 import ChapterLearningSystem from "./components/ChapterLearningSystem";
 import UniversalAnswerSolver from "./components/UniversalAnswerSolver";
+import StudyTimer from "./components/StudyTimer";
 
 // Types
 import { SavedWorkItem } from "./types";
@@ -186,6 +187,10 @@ export default function App() {
                 </div>
               </div>
             </div>
+          )}
+
+          {currentTab === "timer" && (
+            <StudyTimer onSaveWork={handleSaveWork} />
           )}
 
           {currentTab === "notes" && (

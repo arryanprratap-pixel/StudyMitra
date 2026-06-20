@@ -1,4 +1,4 @@
-import { BookOpen, BrainCircuit, ListTodo, Bookmark, FileText, CalendarRange, ArrowRight, Sparkles, Trophy, BookA, GraduationCap } from "lucide-react";
+import { BookOpen, BrainCircuit, ListTodo, Bookmark, FileText, CalendarRange, ArrowRight, Sparkles, Trophy, BookA, GraduationCap, Timer } from "lucide-react";
 
 interface HeroProps {
   setCurrentTab: (tab: string) => void;
@@ -7,6 +7,15 @@ interface HeroProps {
 
 export default function Hero({ setCurrentTab, subjectsCount }: HeroProps) {
   const tools = [
+    {
+      id: "timer",
+      title: "⏳ Pomodoro Study Timer",
+      desc: "Stay concentrated! We configure focus/rest blocks with playful stars and audio chimes for younger minds or rigid Pomodoros for secondary exams.",
+      icon: Timer,
+      iconBg: "bg-red-100 text-red-650 dark:bg-red-950/60 dark:text-red-400",
+      border: "hover:border-red-300 dark:hover:border-red-850 border-red-200 border-2",
+      accent: "red",
+    },
     {
       id: "chapter-learning",
       title: "Smart Chapter Learning System",
