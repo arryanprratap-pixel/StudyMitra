@@ -14,6 +14,8 @@ export default function Navbar({ currentTab, setCurrentTab, isDark, setIsDark }:
   const menuItems = [
     { id: "home", label: "Home" },
     { id: "notes", label: "Simple Notes" },
+    { id: "chapter-learning", label: "Chapter Learning" },
+    { id: "answers-solver", label: "Answer Solver" },
     { id: "quiz", label: "Quiz Practice" },
     { id: "planner", label: "Homework Planner" },
     { id: "word-meanings", label: "Word Meanings" },

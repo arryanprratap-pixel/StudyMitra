@@ -33,6 +33,8 @@ import ProjectFormatMaker from "./components/ProjectFormatMaker";
 import StudyTimetableMaker from "./components/StudyTimetableMaker";
 import SavedWork from "./components/SavedWork";
 import WordMeanings from "./components/WordMeanings";
+import ChapterLearningSystem from "./components/ChapterLearningSystem";
+import UniversalAnswerSolver from "./components/UniversalAnswerSolver";
 
 // Types
 import { SavedWorkItem } from "./types";
@@ -188,6 +190,14 @@ export default function App() {
 
           {currentTab === "notes" && (
             <NotesGenerator onSaveWork={handleSaveWork} />
+          )}
+
+          {currentTab === "chapter-learning" && (
+            <ChapterLearningSystem onSaveWork={handleSaveWork} />
+          )}
+
+          {currentTab === "answers-solver" && (
+            <UniversalAnswerSolver onSaveWork={handleSaveWork} />
           )}
 
           {currentTab === "quiz" && (
@@ -419,6 +429,8 @@ export default function App() {
               </h5>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <button onClick={() => setCurrentTab("notes")} className="text-left text-slate-500 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Simple Notes</button>
+                <button onClick={() => setCurrentTab("chapter-learning")} className="text-left text-emerald-650 hover:text-emerald-500 dark:text-emerald-400 dark:hover:text-white cursor-pointer font-bold">Chapter Learning</button>
+                <button onClick={() => setCurrentTab("answers-solver")} className="text-left text-indigo-650 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-white cursor-pointer font-bold">Answer Solver</button>
                 <button onClick={() => setCurrentTab("quiz")} className="text-left text-slate-500 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Practice Quiz</button>
                 <button onClick={() => setCurrentTab("planner")} className="text-left text-slate-500 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Task Planner</button>
                 <button onClick={() => setCurrentTab("word-meanings")} className="text-left text-slate-500 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Word Meanings</button>

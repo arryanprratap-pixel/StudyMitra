@@ -306,6 +306,106 @@ async function startServer() {
     }
   });
 
+  // 7. DYNAMIC CHAPTER LEARNING
+  apiRouter.post("/generate/chapter-learning", async (req: Request, res: Response) => {
+    try {
+      const { classNum, subject, chapter, sectionId, sectionName } = req.body;
+      if (!classNum || !subject || !chapter || !sectionId) {
+        res.status(400).json({ error: "Missing required parameters for Chapter-wise Learning." });
+        return;
+      }
+
+      const parsedClass = parseInt(classNum, 10);
+      let sInstruction = "";
+      let detailGuidelines = "";
+
+      if (parsedClass <= 5) {
+        sInstruction = "You are an affectionate, gentle primary school teacher guiding children in Class 1 to 5. Keep vocabulary extremely simple, sentence lengths very short, and use cute kid-friendly metaphors or emojis. Avoid any advanced or academic-heavy definitions. Focus on tactile, fun, and picture-based style descriptions.";
+        detailGuidelines = "Structure with simple points, clear big headers, and playful analogies suitable for Class 1 to 5 children. Answer very shortly.";
+      } else if (parsedClass >= 9) {
+        sInstruction = "You are a highly professional high school academic mentor guiding Class 9 to 12 students. Keep terminology robust but clear, explain formulas details thoroughly, structure with professional academic headings, and adhere to ICSE/CBSE curricular high standards.";
+        detailGuidelines = "Under each sub-topic, provide deep academic points, formulas derivations if valid, step-by-step logic, and detailed exam-style answers with neat subheadings.";
+      } else {
+        sInstruction = "You are an encouraging middle school study counselor for Class 6 to 8. Keep instructions direct, interesting, friendly, and visual. Emphasize real-world analogies, straightforward examples, and student homework context.";
+        detailGuidelines = "Provide a balanced, highly structured middle-school level explanation which is direct, clean, and interactive.";
+      }
+
+      const prompt = `You are providing the chapter section: "${sectionName}" (ID: ${sectionId}) for the chapter "${chapter}" under the subject "${subject}" tailored specifically for a Class ${classNum} student.
+
+      Please generate custom, original, structured, and informative notes in clean Markdown format. 
+
+      ${detailGuidelines}
+
+      Specific Section Guidelines:
+      - If section is Introduction (intro): Give a catchy, warm welcoming introduction setting the scene. For young kids, start with an exciting hello!
+      - If section is Summary (summary): Summarize the chapter core in easy bullets.
+      - If section is Definitions (definitions): List 3-5 core definitions clearly. Keep them easy but accurate.
+      - If section is Keywords (keywords): Highlight 4-6 essential high-yield words or vocabulary and explain their meaning.
+      - If section is Formulas/Rules (formulas): List core formulas, rules, or grammar conventions with simple box layouts or explanations. If no math formulas exist, explain core concepts.
+      - If section is Examples (examples): Show 3 clear, real-life examples of how this topic appears in our daily world or homework.
+      - If section is Short Questions (short_q): Provide 4-5 neat high-frequency short school questions with correct answers matched to Class ${classNum} standard.
+      - If section is Long Questions (long_q): Provide 2-3 long, conceptual questions with comprehensive answers.
+      - If section is MCQ Quiz (mcq_quiz): Provide exactly 5 Multiple Choice Questions with clear options A, B, C, D and correct answers highlighted with clear 1-sentence explanations.
+      - If section is Practice Questions (practice_q): Provide 4 self-assessment questions, prompts, or fill-in-the-blanks.
+      - If section is Homework Help (homework_help): Provide fun homework guidelines, project-making physical activity files, or drawing hints related to this chapter.
+      - If section is Exam Tips (exam_tips): Share 3-4 golden mind hacks or points on what teachers usually ask in school semester exams for this topic.
+
+      Do not copy copyrighted book texts. Keep it strictly original, student-friendly, and highly structured with beautiful Markdown.`;
+
+      const text = await callGemini(prompt, sInstruction);
+      res.json({ text });
+    } catch (error: any) {
+      console.error(error);
+      res.status(500).json({ error: error.message || "Failed to generate chapter-wise learning content." });
+    }
+  });
+
+  // 8. UNIVERSAL ANSWER SOLVER
+  apiRouter.post("/generate/universal-solve", async (req: Request, res: Response) => {
+    try {
+      const { question, classNum, subject } = req.body;
+      if (!question) {
+        res.status(400).json({ error: "Please write a school question to solve." });
+        return;
+      }
+
+      const parsedClass = parseInt(classNum || "7", 10);
+      let sInstruction = "";
+      let answerSpecs = "";
+
+      if (parsedClass <= 5) {
+        sInstruction = "You are an affectionate primary school teacher. Use extremely simple words, short sentences, and highly direct answers. Present explanation using funny metaphors or real-life child examples. Avoid high school terminology.";
+        answerSpecs = "Answer must be very friendly, short, easy to copy, and colorful with emojis. If it's math, use basic counting, drawings representation, or simple steps.";
+      } else if (parsedClass >= 9) {
+        sInstruction = "You are an expert high school tutor. Provide formal, highly detailed, precise, and academic exam-style answers using proper terms. Structure the response beautifully with subheadings, theories/conventions, and systematic point forms.";
+        answerSpecs = "Answer must be comprehensive, curriculum-compliant, detailing equations step-by-step or giving extensive essays/letters format. Use proper analytical tone.";
+      } else {
+        sInstruction = "You are a supportive middle school study mentor. Keep answers highly balanced - clear, interesting, structured, and easy to memorize for school tests (for Class 6 to 8).";
+        answerSpecs = "Answer should be direct, explanatory, containing a brief definition, key points, and a simple real-world example.";
+      }
+
+      const prompt = `Solve the following school query/doubt:
+      Question: "${question}"
+      Subject: "${subject || "General / Auto-detect"}"
+      Student Class: Class ${classNum || "7"}
+
+      ${answerSpecs}
+
+      Core Rules:
+      1. Give fully correct, original, and highly clear student-friendly answers.
+      2. If the user's question is completely garbled, unclear, or too brief (e.g. just a single word with no question), ask they add more details or specify what they want to know.
+      3. If the answer is unsure or multiple solutions exist, explain that politely and present a reliable educational description.
+      4. Support solving math steps, explaining grammatical rules, writing drafts for letters, essays, applications, explaining science processes, and defining history/civics queries.
+      5. Format neatly with Markdown. Make formulas pop out clearly.`;
+
+      const text = await callGemini(prompt, sInstruction);
+      res.json({ text });
+    } catch (error: any) {
+      console.error(error);
+      res.status(500).json({ error: error.message || "Failed to solve question." });
+    }
+  });
+
   app.use("/api", apiRouter);
 
   // Serve client assets

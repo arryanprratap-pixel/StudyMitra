@@ -51,7 +51,7 @@ export interface HomeworkTask {
 
 export interface SavedWorkItem {
   id: string;
-  type: "Note" | "Book Review" | "Project Format" | "Timetable" | "Word Meanings";
+  type: "Note" | "Book Review" | "Project Format" | "Timetable" | "Word Meanings" | "Chapter Learning" | "Solved Answer";
   title: string;
   timestamp: string;
   content: string;

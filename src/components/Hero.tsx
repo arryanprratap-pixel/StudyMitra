@@ -1,4 +1,4 @@
-import { BookOpen, BrainCircuit, ListTodo, Bookmark, FileText, CalendarRange, ArrowRight, Sparkles, Trophy, BookA } from "lucide-react";
+import { BookOpen, BrainCircuit, ListTodo, Bookmark, FileText, CalendarRange, ArrowRight, Sparkles, Trophy, BookA, GraduationCap } from "lucide-react";
 
 interface HeroProps {
   setCurrentTab: (tab: string) => void;
@@ -7,6 +7,24 @@ interface HeroProps {
 
 export default function Hero({ setCurrentTab, subjectsCount }: HeroProps) {
   const tools = [
+    {
+      id: "chapter-learning",
+      title: "Smart Chapter Learning System",
+      desc: "Comprehensive chapter summaries, definitions, formulas, MCQs, and exam hacks for all subjects (Class 1-12).",
+      icon: GraduationCap,
+      iconBg: "bg-emerald-100 text-emerald-750 dark:bg-emerald-950/60 dark:text-emerald-400",
+      border: "hover:border-emerald-300 dark:hover:border-emerald-850 border-emerald-200 border-2",
+      accent: "emerald",
+    },
+    {
+      id: "answers-solver",
+      title: "Universal Answer Solver",
+      desc: "Solve homework doubts, maths steps, coding, essays, letters, grammar rules, tailored carefully to your class grade.",
+      icon: BrainCircuit,
+      iconBg: "bg-indigo-100 text-indigo-755 dark:bg-indigo-950/60 dark:text-indigo-400",
+      border: "hover:border-indigo-300 dark:hover:border-indigo-850 border-indigo-200 border-2",
+      accent: "indigo",
+    },
     {
       id: "notes",
       title: "Simple Notes Generator",
