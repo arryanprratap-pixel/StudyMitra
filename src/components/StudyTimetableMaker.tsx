@@ -11,6 +11,7 @@ interface StudyTimetableMakerProps {
 export default function StudyTimetableMaker({ onSaveWork }: StudyTimetableMakerProps) {
   const [schoolTime, setSchoolTime] = useState("8:00 AM to 2:00 PM");
   const [subjects, setSubjects] = useState("Science, Mathematics");
+  const [classNum, setClassNum] = useState("7");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState("");
   const [copied, setCopied] = useState(false);
@@ -33,7 +34,7 @@ export default function StudyTimetableMaker({ onSaveWork }: StudyTimetableMakerP
       const response = await fetch("/api/generate/timetable", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ schoolTime, subjects }),
+        body: JSON.stringify({ schoolTime, subjects, classNum }),
       });
 
       if (!response.ok) {
@@ -70,9 +71,9 @@ export default function StudyTimetableMaker({ onSaveWork }: StudyTimetableMakerP
     if (!result) return;
     onSaveWork({
       type: "Timetable",
-      title: `Timetable (School: ${schoolTime})`,
+      title: `Timetable (Class ${classNum}, School: ${schoolTime})`,
       content: result,
-      metadata: { schoolTime, subjects },
+      metadata: { schoolTime, subjects, classNum },
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -137,6 +138,24 @@ export default function StudyTimetableMaker({ onSaveWork }: StudyTimetableMakerP
                 value={subjects}
                 onChange={(e) => setSubjects(e.target.value)}
               />
+            </div>
+
+            <div>
+              <label htmlFor="routine-class-select" className="block text-xs font-semibold text-slate-705 dark:text-slate-355 mb-1.5 font-display">
+                Your Class
+              </label>
+              <select
+                id="routine-class-select"
+                className="w-full px-4 py-3 rounded-2xl border-2 border-slate-202 dark:border-slate-705 focus:border-violet-400 outline-none font-sans text-sm dark:bg-slate-800 dark:text-white cursor-pointer"
+                value={classNum}
+                onChange={(e) => setClassNum(e.target.value)}
+              >
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((grade) => (
+                  <option key={grade} value={grade.toString()}>
+                    Class {grade}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <button

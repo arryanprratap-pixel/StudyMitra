@@ -35,6 +35,11 @@ export interface TimetableRequest {
   subjects: string;
 }
 
+export interface WordMeaningRequest {
+  word: string;
+  classNum: string;
+}
+
 export interface HomeworkTask {
   id: string;
   task: string;
@@ -46,7 +51,7 @@ export interface HomeworkTask {
 
 export interface SavedWorkItem {
   id: string;
-  type: "Note" | "Book Review" | "Project Format" | "Timetable";
+  type: "Note" | "Book Review" | "Project Format" | "Timetable" | "Word Meanings";
   title: string;
   timestamp: string;
   content: string;

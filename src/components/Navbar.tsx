@@ -16,6 +16,7 @@ export default function Navbar({ currentTab, setCurrentTab, isDark, setIsDark }:
     { id: "notes", label: "Simple Notes" },
     { id: "quiz", label: "Quiz Practice" },
     { id: "planner", label: "Homework Planner" },
+    { id: "word-meanings", label: "Word Meanings" },
     { id: "book-review", label: "Book Review Maker" },
     { id: "project-format", label: "Project Format" },
     { id: "timetable", label: "Study Timetable" },

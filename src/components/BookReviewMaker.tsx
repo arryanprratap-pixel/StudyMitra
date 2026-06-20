@@ -13,6 +13,7 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
   const [author, setAuthor] = useState("");
   const [genre, setGenre] = useState("Fiction");
   const [keyPoints, setKeyPoints] = useState("");
+  const [classNum, setClassNum] = useState("6");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState("");
   const [copied, setCopied] = useState(false);
@@ -35,7 +36,7 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
       const response = await fetch("/api/generate/book-review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, author, genre, keyPoints }),
+        body: JSON.stringify({ title, author, genre, keyPoints, classNum }),
       });
 
       if (!response.ok) {
@@ -72,9 +73,9 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
     if (!result) return;
     onSaveWork({
       type: "Book Review",
-      title: `Book Review: ${title} by ${author}`,
+      title: `Book Review: ${title} by ${author} (Class ${classNum})`,
       content: result,
-      metadata: { title, author, genre, keyPoints },
+      metadata: { title, author, genre, keyPoints, classNum },
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -141,8 +142,8 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
               />
             </div>
 
-            <div>
-              <label htmlFor="book-genre-select" className="block text-xs font-semibold text-slate-705 dark:text-slate-350 mb-1.5 font-display">
+             <div>
+              <label htmlFor="book-genre-select" className="block text-xs font-semibold text-slate-705 dark:text-slate-355 mb-1.5 font-display">
                 Genre / Type
               </label>
               <select
@@ -158,6 +159,24 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
                 <option value="Classics">Classic Books</option>
                 <option value="Biography">Real Life / Biography</option>
                 <option value="Science Non-fiction">Science Non-fiction</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="book-class-select" className="block text-xs font-semibold text-slate-705 dark:text-slate-355 mb-1.5 font-display">
+                Your Class
+              </label>
+              <select
+                id="book-class-select"
+                className="w-full px-4 py-3 rounded-2xl border-2 border-slate-202 dark:border-slate-705 focus:border-rose-450 outline-none font-sans text-sm dark:bg-slate-800 dark:text-white cursor-pointer"
+                value={classNum}
+                onChange={(e) => setClassNum(e.target.value)}
+              >
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((grade) => (
+                  <option key={grade} value={grade.toString()}>
+                    Class {grade}
+                  </option>
+                ))}
               </select>
             </div>
 

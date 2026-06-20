@@ -18,7 +18,8 @@ import {
   Github,
   Twitter,
   ExternalLink,
-  MessageSquare
+  MessageSquare,
+  BookA
 } from "lucide-react";
 
 // Components
@@ -31,6 +32,7 @@ import BookReviewMaker from "./components/BookReviewMaker";
 import ProjectFormatMaker from "./components/ProjectFormatMaker";
 import StudyTimetableMaker from "./components/StudyTimetableMaker";
 import SavedWork from "./components/SavedWork";
+import WordMeanings from "./components/WordMeanings";
 
 // Types
 import { SavedWorkItem } from "./types";
@@ -164,7 +166,7 @@ export default function App() {
                   <div>
                     <h4 className="text-md font-bold font-display text-slate-900 dark:text-white">Active Classroom Guidance</h4>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                      All outputs are calibrated for Middle school grades. We keep texts highly simple and fun to read, mirroring Class 7 and Class 8 curriculum standards!
+                      All outputs are custom calibrated for Class 1 to Class 12. We keep answers extremely simple and short for lower classes, and richer for higher classes, always in student-friendly learning language!
                     </p>
                   </div>
                 </div>
@@ -194,6 +196,10 @@ export default function App() {
 
           {currentTab === "planner" && (
             <HomeworkPlanner />
+          )}
+
+          {currentTab === "word-meanings" && (
+            <WordMeanings onSaveWork={handleSaveWork} />
           )}
 
           {currentTab === "book-review" && (
@@ -226,14 +232,14 @@ export default function App() {
                   About Student Helper Hub 📖
                 </h2>
                 <p className="text-sm text-slate-600 dark:text-slate-350 leading-relaxed font-sans">
-                  The <strong>Student Helper Hub</strong> was designed with one simple goal: to make middle-school homework and self-study exciting, fast, and completely stress-free. Class 6 to 10 is an essential phase where students learn science experiments, history formulas, reading habits, and routine building. We built a structured visual space that helps answer simple queries in standard school vocabulary.
+                  The <strong>Student Helper Hub</strong> was designed with one simple goal: to make school homework and self-study exciting, fast, and completely stress-free. Covering grades from Class 1 to 12 represents various crucial phases of student learning, and our tools customize answers precisely for every classroom age!
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-100 dark:border-slate-800">
                   <div className="space-y-2">
                     <span className="text-lg">👶</span>
                     <h4 className="font-bold text-sm text-slate-900 dark:text-white font-display">Simple Vocabulary</h4>
-                    <p className="text-xs text-slate-400">Explanations keep terms basic and easy so Middle school kids can directly understand and make notes.</p>
+                    <p className="text-xs text-slate-400">Explanations keep terms basic and easy so school kids can directly understand and make notes.</p>
                   </div>
                   <div className="space-y-2">
                     <span className="text-lg">🔌</span>
@@ -415,6 +421,7 @@ export default function App() {
                 <button onClick={() => setCurrentTab("notes")} className="text-left text-slate-500 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Simple Notes</button>
                 <button onClick={() => setCurrentTab("quiz")} className="text-left text-slate-500 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Practice Quiz</button>
                 <button onClick={() => setCurrentTab("planner")} className="text-left text-slate-500 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Task Planner</button>
+                <button onClick={() => setCurrentTab("word-meanings")} className="text-left text-slate-500 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Word Meanings</button>
                 <button onClick={() => setCurrentTab("book-review")} className="text-left text-slate-505 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Book Review</button>
                 <button onClick={() => setCurrentTab("project-format")} className="text-left text-slate-505 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Project Form</button>
                 <button onClick={() => setCurrentTab("timetable")} className="text-left text-slate-505 hover:text-sky-505 dark:text-slate-400 dark:hover:text-white cursor-pointer font-medium">Study Planner</button>
@@ -427,14 +434,13 @@ export default function App() {
                 Curriculum Grades Support
               </h5>
               <p className="text-xs text-slate-450 dark:text-slate-400 leading-normal font-sans">
-                Covering CBSE, ICSE, and state boards chapters for Class 6, Class 7, Class 8, Class 9, and Class 10 studies.
+                Covering primary, middle, and high school chapters for Class 1 up to Class 12 studies.
               </p>
-              <div className="flex gap-2 text-slate-400 dark:text-slate-350">
-                <span className="w-7 h-7 rounded bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xs font-bold font-mono">C6</span>
-                <span className="w-7 h-7 rounded bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xs font-bold font-mono">C7</span>
-                <span className="w-7 h-7 rounded bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xs font-bold font-mono">C8</span>
-                <span className="w-7 h-7 rounded bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xs font-bold font-mono">C9</span>
-                <span className="w-7 h-7 rounded bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xs font-bold font-mono">C10</span>
+              <div className="flex flex-wrap gap-1.5 text-slate-400 dark:text-slate-350 max-w-[280px]">
+                <span className="px-1.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 text-[10px] font-bold font-mono">Class 1-5</span>
+                <span className="px-1.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 text-[10px] font-bold font-mono">Class 6-8</span>
+                <span className="px-1.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 text-[10px] font-bold font-mono">Class 9-10</span>
+                <span className="px-1.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 text-[10px] font-bold font-mono">Class 11-12</span>
               </div>
             </div>
           </div>

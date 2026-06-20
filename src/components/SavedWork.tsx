@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Save, FolderOpen, Trash2, Copy, Download, Check, Eye, EyeOff, FileText, BookOpen, Bookmark, CalendarRange } from "lucide-react";
+import { Save, FolderOpen, Trash2, Copy, Download, Check, Eye, EyeOff, FileText, BookOpen, Bookmark, CalendarRange, BookA } from "lucide-react";
 import { SavedWorkItem } from "../types";
 import { copyToClipboard, downloadTextFile, formatDate } from "../utils";
 import ReactMarkdown from "react-markdown";
@@ -26,6 +26,8 @@ export default function SavedWork({ savedItems, onRemoveItem, onClearAll }: Save
         return <FileText className="w-5 h-5 text-indigo-500" />;
       case "Timetable":
         return <CalendarRange className="w-5 h-5 text-violet-500" />;
+      case "Word Meanings":
+        return <BookA className="w-5 h-5 text-amber-500" />;
     }
   };
 
@@ -111,6 +113,7 @@ export default function SavedWork({ savedItems, onRemoveItem, onClearAll }: Save
                 { id: "Book Review", label: "Reviews" },
                 { id: "Project Format", label: "Projects" },
                 { id: "Timetable", label: "Routines" },
+                { id: "Word Meanings", label: "Vocab" },
               ].map((pill) => (
                 <button
                   key={pill.id}

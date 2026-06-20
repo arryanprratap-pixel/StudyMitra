@@ -11,6 +11,7 @@ interface ProjectFormatMakerProps {
 export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerProps) {
   const [topic, setTopic] = useState("");
   const [subject, setSubject] = useState("Science");
+  const [classNum, setClassNum] = useState("7");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState("");
   const [copied, setCopied] = useState(false);
@@ -33,7 +34,7 @@ export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerPro
       const response = await fetch("/api/generate/project-format", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, subject }),
+        body: JSON.stringify({ topic, subject, classNum }),
       });
 
       if (!response.ok) {
@@ -70,9 +71,9 @@ export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerPro
     if (!result) return;
     onSaveWork({
       type: "Project Format",
-      title: `Project: ${topic} (${subject})`,
+      title: `Project: ${topic} (${subject}) - Class ${classNum}`,
       content: result,
-      metadata: { topic, subject },
+      metadata: { topic, subject, classNum },
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -127,7 +128,7 @@ export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerPro
             </div>
 
             <div>
-              <label htmlFor="proj-subject-select" className="block text-xs font-semibold text-slate-755 dark:text-slate-350 mb-1.5 font-display">
+              <label htmlFor="proj-subject-select" className="block text-xs font-semibold text-slate-755 dark:text-slate-355 mb-1.5 font-display">
                 Subject
               </label>
               <select
@@ -141,6 +142,24 @@ export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerPro
                 <option value="Geography">Geography & Environment</option>
                 <option value="English">English / Language Arts</option>
                 <option value="Mathematics">Mathematics Projects</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="proj-class-select" className="block text-xs font-semibold text-slate-705 dark:text-slate-355 mb-1.5 font-display">
+                Your Class
+              </label>
+              <select
+                id="proj-class-select"
+                className="w-full px-4 py-3 rounded-2xl border-2 border-slate-202 dark:border-slate-705 focus:border-indigo-400 outline-none font-sans text-sm dark:bg-slate-800 dark:text-white cursor-pointer"
+                value={classNum}
+                onChange={(e) => setClassNum(e.target.value)}
+              >
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((grade) => (
+                  <option key={grade} value={grade.toString()}>
+                    Class {grade}
+                  </option>
+                ))}
               </select>
             </div>
 

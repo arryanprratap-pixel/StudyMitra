@@ -1,4 +1,4 @@
-import { BookOpen, BrainCircuit, ListTodo, Bookmark, FileText, CalendarRange, ArrowRight, Sparkles, Trophy } from "lucide-react";
+import { BookOpen, BrainCircuit, ListTodo, Bookmark, FileText, CalendarRange, ArrowRight, Sparkles, Trophy, BookA } from "lucide-react";
 
 interface HeroProps {
   setCurrentTab: (tab: string) => void;
@@ -33,6 +33,15 @@ export default function Hero({ setCurrentTab, subjectsCount }: HeroProps) {
       iconBg: "bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400",
       border: "hover:border-emerald-300 dark:hover:border-emerald-850",
       accent: "green",
+    },
+    {
+      id: "word-meanings",
+      title: "Word Meanings & Vocab",
+      desc: "Instantly find easy-to-understand definitions, simplified example sentences, and helpful synonyms.",
+      icon: BookA,
+      iconBg: "bg-teal-100 text-teal-650 dark:bg-teal-950/60 dark:text-teal-400",
+      border: "hover:border-teal-300 dark:hover:border-teal-850",
+      accent: "teal",
     },
     {
       id: "book-review",
@@ -82,7 +91,7 @@ export default function Hero({ setCurrentTab, subjectsCount }: HeroProps) {
         <div className="max-w-3xl relative z-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-300 font-display font-medium text-xs mb-6 shadow-sm border border-yellow-250">
             <Sparkles className="w-4.5 h-4.5 animate-pulse text-yellow-600" />
-            Class 6 to Class 10 Study Companion
+            Class 1 to Class 12 Study Companion
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight font-display">
             Student Helper <span className="text-sky-500 underline decoration-yellow-400 decoration-wavy">Hub</span>

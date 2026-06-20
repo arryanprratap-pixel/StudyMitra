@@ -172,11 +172,11 @@ export default function QuizPractice() {
                     value={classNum}
                     onChange={(e) => setClassNum(e.target.value)}
                   >
-                    <option value="6">Class 6</option>
-                    <option value="7">Class 7</option>
-                    <option value="8">Class 8</option>
-                    <option value="9">Class 9</option>
-                    <option value="10">Class 10</option>
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map((grade) => (
+                      <option key={grade} value={grade.toString()}>
+                        Class {grade}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
