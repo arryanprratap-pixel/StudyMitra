@@ -16,6 +16,7 @@ export default function QuizPractice() {
   const [answerLog, setAnswerLog] = useState<{ question: string; chosen: string; correct: string; isCorrect: boolean }[]>([]);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
+  const [isDemo, setIsDemo] = useState(false);
 
   const handleStartQuiz = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +47,7 @@ export default function QuizPractice() {
         throw new Error("Invalid format returned by classroom generator.");
       }
       setQuestions(data.quiz);
+      setIsDemo(!!data.isDemo);
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
     } finally {
@@ -333,6 +335,17 @@ export default function QuizPractice() {
 
             {/* Question Card Content */}
             <div className="p-6 md:p-8 space-y-6">
+              {isDemo && currentIdx === 0 && (
+                <div className="bg-amber-50 dark:bg-amber-900/10 border-2 border-amber-200 dark:border-amber-900/60 rounded-2xl p-4 text-xs text-amber-800 dark:text-amber-300 flex items-start gap-2.5">
+                  <span className="text-base">💡</span>
+                  <div>
+                    <p className="font-bold text-amber-900 dark:text-amber-200 text-sm">Offline Calibration Mode</p>
+                    <p className="mt-0.5 leading-relaxed text-amber-800 dark:text-amber-350">
+                      This is an offline study quiz. To unlock unlimited real-time generation on any book chapter, set your <code className="px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900 rounded font-mono text-amber-950 dark:text-amber-100">GEMINI_API_KEY</code> under the settings secrets panel.
+                    </p>
+                  </div>
+                </div>
+              )}
               <h4 className="text-lg font-bold text-slate-905 dark:text-white leading-relaxed font-display">
                 {currentQ.question}
               </h4>

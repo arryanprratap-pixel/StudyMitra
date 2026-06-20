@@ -30,6 +30,7 @@ export default function UniversalAnswerSolver({ onSaveWork }: UniversalAnswerSol
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const [recentSearches, setRecentSearches] = useState<RecentSearchItem[]>([]);
+  const [isDemo, setIsDemo] = useState(false);
 
   // Load recent searches from localStorage on mount
   useEffect(() => {
@@ -104,6 +105,7 @@ export default function UniversalAnswerSolver({ onSaveWork }: UniversalAnswerSol
       const data = await response.json();
       const answer = data.text;
       setResult(answer);
+      setIsDemo(!!data.isDemo);
 
       // Save to recent searches (max 10)
       const newItem: RecentSearchItem = {
@@ -397,6 +399,17 @@ export default function UniversalAnswerSolver({ onSaveWork }: UniversalAnswerSol
                 </div>
               ) : result ? (
                 <div className="space-y-4 text-slate-800 dark:text-slate-200 text-sm leading-relaxed" id="solved-explain-rendered-markdown">
+                  {isDemo && (
+                    <div className="bg-amber-50 dark:bg-amber-900/10 border-2 border-amber-200 dark:border-amber-900/60 rounded-2xl p-4 text-xs text-amber-800 dark:text-amber-300 mb-6 flex items-start gap-2.5">
+                      <span className="text-base">💡</span>
+                      <div>
+                        <p className="font-bold text-amber-900 dark:text-amber-200 text-sm">Demo Mode Active</p>
+                        <p className="mt-0.5 leading-relaxed text-amber-800 dark:text-amber-350">
+                          This solution breakdown was curated in offline-calibration mode because live AI secrets are not active. To pose customized academic questions and receive real-time textbook analyses, set your <code className="px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900 rounded font-mono text-[11px] text-amber-955 dark:text-amber-100">GEMINI_API_KEY</code> within Settings &gt; Secrets.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                   <ReactMarkdown
                     components={{
                       h1: ({ ...props }) => <h1 className="text-2xl font-bold font-display text-indigo-650 dark:text-indigo-400 mt-2 mb-4 border-b border-indigo-100 dark:border-slate-800 pb-2 flex items-center gap-2" {...props} />,

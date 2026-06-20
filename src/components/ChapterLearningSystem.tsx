@@ -39,6 +39,7 @@ export default function ChapterLearningSystem({ onSaveWork }: ChapterLearningSys
   const [error, setError] = useState<string>("");
   const [copied, setCopied] = useState<boolean>(false);
   const [saved, setSaved] = useState<boolean>(false);
+  const [isDemo, setIsDemo] = useState<boolean>(false);
   
   // Local cache for fetched active sections to feel lightning fast
   const [contentCache, setContentCache] = useState<Record<string, string>>({});
@@ -174,6 +175,7 @@ export default function ChapterLearningSystem({ onSaveWork }: ChapterLearningSys
 
       const data = await resp.json();
       const generated = data.text;
+      setIsDemo(!!data.isDemo);
 
       // Update Cache
       setContentCache(prev => ({
@@ -485,6 +487,17 @@ export default function ChapterLearningSystem({ onSaveWork }: ChapterLearningSys
                 </div>
               ) : resultText ? (
                 <div className="space-y-4 text-slate-800 dark:text-slate-200 text-sm leading-relaxed" id="chapter-learning-rendered-markdown">
+                  {isDemo && (
+                    <div className="bg-amber-50 dark:bg-amber-900/10 border-2 border-amber-200 dark:border-amber-900/60 rounded-2xl p-4 text-xs text-amber-805 dark:text-amber-300 mb-6 flex items-start gap-2.5 font-sans">
+                      <span className="text-base">💡</span>
+                      <div>
+                        <p className="font-bold text-amber-900 dark:text-amber-200 text-sm font-display">Demo Mode Active</p>
+                        <p className="mt-0.5 leading-relaxed text-amber-800 dark:text-amber-350 text-xs">
+                          This chapter breakdown is running in offline-calibration mode because live AI secrets are not active. To explore custom, real-time breakdowns of any bespoke school syllabus, configure your <code className="px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900 rounded font-mono text-[11px] text-amber-955 dark:text-amber-100">GEMINI_API_KEY</code> within Settings &gt; Secrets.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                   <ReactMarkdown
                     components={{
                       h1: ({ ...props }) => <h1 className="text-2xl font-bold font-display text-emerald-650 dark:text-emerald-400 mt-2 mb-4 border-b border-emerald-100 dark:border-slate-800 pb-2 flex items-center gap-2" {...props} />,

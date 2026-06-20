@@ -19,6 +19,7 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [isDemo, setIsDemo] = useState(false);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +47,7 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
 
       const data = await response.json();
       setResult(data.text);
+      setIsDemo(!!data.isDemo);
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
     } finally {
@@ -320,6 +322,17 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
                 </div>
               ) : result ? (
                 <div className="space-y-4 text-slate-800 dark:text-slate-200 text-sm leading-relaxed" id="review-rendered-content">
+                  {isDemo && (
+                    <div className="bg-amber-50 dark:bg-amber-900/10 border-2 border-amber-200 dark:border-amber-900/60 rounded-2xl p-4 text-xs text-amber-800 dark:text-amber-300 mb-6 flex items-start gap-2.5">
+                      <span className="text-base">💡</span>
+                      <div>
+                        <p className="font-bold text-amber-900 dark:text-amber-200 text-sm">Demo Mode Active</p>
+                        <p className="mt-0.5 leading-relaxed text-amber-800 dark:text-amber-350">
+                          This book review was formatted in offline-calibration mode because live AI secrets are not active. To unleash fully custom, real-time reviews on any novel or biography in seconds, set your <code className="px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900 rounded font-mono text-amber-950 dark:text-amber-100">GEMINI_API_KEY</code> within Settings &gt; Secrets.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                   <ReactMarkdown
                     components={{
                       h1: ({ ...props }) => <h1 className="text-xl font-bold font-display text-rose-650 dark:text-rose-400 mt-2 mb-4 border-b border-rose-100 dark:border-slate-800 pb-2" {...props} />,
