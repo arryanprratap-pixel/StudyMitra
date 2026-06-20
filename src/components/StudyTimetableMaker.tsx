@@ -8,6 +8,38 @@ interface StudyTimetableMakerProps {
   onSaveWork: (item: Omit<SavedWorkItem, "id" | "timestamp">) => void;
 }
 
+function getLocalTimetable(schoolTime: string, subjects: string, classNum: string): string {
+  const normTime = schoolTime.trim() || "8:00 AM to 2:00 PM";
+  const finalSubs = subjects.trim() || "Science, Mathematics, Social Studies";
+  const primarySubject = finalSubs.split(",")[0] || "Major Subjects";
+  const secondarySubject = finalSubs.split(",")[1] || "Revision Core";
+
+  return `# 🗓️ Class-Calibrated Personal Study Timetable
+*Tailored for Class ${classNum} • School Hours: ${normTime} • Local Calibration Mode*
+
+Here is your highly custom, balanced, and productive daily schedule built to cover **${finalSubs}** while securing healthy rest, hobbies, and sports!
+
+| Time Slot | Scheduled Focus | Quick Tips & Goals |
+| :--- | :--- | :--- |
+| **07:00 AM - 08:00 AM** | Wake Up & School Prep☀️ | Stretch, drink warm waters, and eat a healthy breakfast! |
+| **08:00 AM - 02:00 PM** | Academic School Hours 🏫 | Focus carefully on live explanations and clarify your doubts during active hours. |
+| **02:00 PM - 03:00 PM** | Return Home & Lunch Break 🍽️ | Enjoy a nutritious hot lunch and rest your mind. |
+| **03:00 PM - 04:00 PM** | Hobby Play & Sports Activity ⚽ | Unwind! Go outdoors, draw sketchbooks, or ride bikes. |
+| **04:00 PM - 05:00 PM** | **Self-Study Block 1: Homework Tasks** 📝 | Prioritize **${primarySubject}** tasks. Clear up assignment lists! |
+| **05:00 PM - 05:30 PM** | Healthy Refreshment Break 🥛 | Enjoy milk or orange fruits to re-energize. |
+| **05:30 PM - 06:30 PM** | **Self-Study Block 2: Chapter Study** 📚 | Revision focus on **${secondarySubject}**. Memorize glossary lists. |
+| **06:30 PM - 07:15 PM** | Interactive Quiz / Self-Review 🎯 | Play 1 mini practice MCQ session to check your recall. |
+| **07:15 PM - 08:30 PM** | Screen Time / Family Talk 📺 | Relax with your brothers, sisters, and parents. |
+| **08:30 PM - 09:15 PM**| Calming Family Dinner 🍲| Enjoy clean food and pack your school bag for tomorrow. |
+| **09:15 PM - 09:30 PM**| Wash & Ready for Bed 🦷| Brush teeth, shut electronic screen displays, and relax. |
+| **09:30 PM - 07:00 AM**| Sweet Rest Sleep Block 😴| Secure a full 9-hour restorative sleep to stay glowing! |
+
+---
+
+### 🏆 Study Counselor Advisory:
+> "Dear Class ${classNum} student, consistency represents your main key! Study in short, focused blocks of 20-30 minutes, and reward yourself with a little stretch or water after every session. You possess the direct strength to achieve your absolute highest goals!"`;
+}
+
 export default function StudyTimetableMaker({ onSaveWork }: StudyTimetableMakerProps) {
   const [schoolTime, setSchoolTime] = useState("8:00 AM to 2:00 PM");
   const [subjects, setSubjects] = useState("Science, Mathematics");
@@ -47,7 +79,10 @@ export default function StudyTimetableMaker({ onSaveWork }: StudyTimetableMakerP
       setResult(data.text);
       setIsDemo(!!data.isDemo);
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
+      console.warn("Timetable API call failed. Generating localized template fallback:", err);
+      const generated = getLocalTimetable(schoolTime, subjects, classNum);
+      setResult(generated);
+      setIsDemo(true);
     } finally {
       setLoading(false);
     }

@@ -8,6 +8,33 @@ interface BookReviewMakerProps {
   onSaveWork: (item: Omit<SavedWorkItem, "id" | "timestamp">) => void;
 }
 
+function getLocalBookReview(title: string, author: string, genre: string, keyPoints: string, classNum: string): string {
+  const cleanTitle = title.trim() || "The Great Adventure";
+  const cleanAuthor = author.trim() || "Anonymous School Teacher";
+  const cleanPoints = keyPoints.trim() || "Perseverance, daily kindness, and regular reading habits.";
+  
+  return `# 📖 School Book Review: "${cleanTitle}"
+*Reviewed for Class ${classNum} • Genre: ${genre} • Author: ${cleanAuthor} • Local Calibration Mode*
+
+## 📝 Plot & What Book is About:
+The fascinating book **"${cleanTitle}"** written by ${cleanAuthor} is a captivating story set in a world filled with exciting learnings and dynamic characters. The major themes address growing up, solving daily problems, and finding unique answers when times are difficult.
+
+## 🌟 My Favorite Aspects:
+Our favorite parts of the book are the interactive character arcs and how the lessons translate to daily life. The primary takeaways celebrate:
+- **${cleanPoints}**
+
+The narrative is structured with extremely direct and friendly chapters that keep students of Class ${classNum} thoroughly engaged from start to tail!
+
+## 🎓 My Learnings & Moral of the Story:
+1. Working together with school friends always resolves difficult workspace trials.
+2. We must never feel afraid of initial errors, but rather use them as guideposts.
+3. Reading standard books expands our creativity and makes our answers look neat!
+
+## ⭐ My Rating & Recommendation:
+- **School Rating**: ⭐⭐⭐⭐⭐ (5 / 5 Stars)
+- **Recommendation**: This represented a truly helpful book for any Class ${classNum} reference workbook.`;
+}
+
 export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -49,7 +76,10 @@ export default function BookReviewMaker({ onSaveWork }: BookReviewMakerProps) {
       setResult(data.text);
       setIsDemo(!!data.isDemo);
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
+      console.warn("Book review API failed. Utilizing offline generator:", err);
+      const generated = getLocalBookReview(title, author, genre, keyPoints, classNum);
+      setResult(generated);
+      setIsDemo(true);
     } finally {
       setLoading(false);
     }

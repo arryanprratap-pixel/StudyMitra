@@ -8,6 +8,51 @@ interface ProjectFormatMakerProps {
   onSaveWork: (item: Omit<SavedWorkItem, "id" | "timestamp">) => void;
 }
 
+function getLocalProjectFormat(topic: string, subject: string, classNum: string): string {
+  const finalTopic = topic.trim() || `Amazing ${subject} Exploration`;
+  return `# 🎨 Creative School Project Guide: ${finalTopic}
+*Subject Category: ${subject} • Tailored for Class ${classNum} Standard • Local Calibration Mode*
+
+## 📁 1. Project Cover Page Guidelines:
+- **School Name**: [Write Your Registered School Name]
+- **Project Topic Title**: Investigated Analysis of "${finalTopic}"
+- **Course Subject**: ${subject}
+- **Submitted By**: [Your Name], Class ${classNum}
+- **Submitted To**: [Your Class Teacher's Name]
+
+---
+
+## 📝 2. Outline & Introduction:
+This project aims to investigate the deep conceptual features behind **${finalTopic}**. We explore how its rules apply to daily scenarios, execute mock calculations where appropriate, and summarize core curriculum points.
+
+### 🎯 Core Objectives:
+1. To understand the primary laws governing ${finalTopic}.
+2. To compile neat, structured references suitable for Class ${classNum} students.
+3. To build interactive, hands-on craft representations.
+
+---
+
+## 🛠️ 3. Materials & Craft Tools Required:
+- Clean white chart papers or project catalog files.
+- Sketch markers, rulers, pencil set, and glues.
+- Grade ${classNum} ${subject} textbook references.
+- Printed maps, diagram drawings, or hand-painted sketches showing cycles.
+
+---
+
+## 👣 4. Step-by-Step Layout Instructions:
+- **Step 1: Front Page Design**: Create an elegant double border with light geometric leaves or stars. Use large bold fonts for the title.
+- **Step 2: Introduction**: Lay out a paragraph summarizing why learning ${finalTopic} matters.
+- **Step 3: Core Diagram Page**: Draw a neat, labeled sketch (e.g., flowchart or step-by-step cycle) representing the concept inputs and results.
+- **Step 4: Practical Findings/Case Study**: Write 3 points detailing how we observe this concept in nature or local neighborhoods.
+- **Step 5: Learnings Summary**: Outline what you figured out while preparing this project layout!
+
+---
+
+## 🏆 5. Summary & Self-Evaluation:
+Completing this CBSE-aligned project format proved that studying **${finalTopic}** teaches us practical, long-term skills in ${subject}. Consistent efforts, neat margins, and bulleted text keys deliver excellent classroom grades!`;
+}
+
 export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerProps) {
   const [topic, setTopic] = useState("");
   const [subject, setSubject] = useState("Science");
@@ -21,10 +66,13 @@ export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerPro
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!topic.trim()) {
-      setError("Please fill in a Project Topic.");
-      return;
+    
+    let finalTopic = topic.trim();
+    if (!finalTopic) {
+      finalTopic = `Class ${classNum} ${subject} Practical File`;
+      setTopic(finalTopic);
     }
+
     setError("");
     setLoading(true);
     setResult("");
@@ -35,7 +83,7 @@ export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerPro
       const response = await fetch("/api/generate/project-format", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, subject, classNum }),
+        body: JSON.stringify({ topic: finalTopic, subject, classNum }),
       });
 
       if (!response.ok) {
@@ -47,7 +95,10 @@ export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerPro
       setResult(data.text);
       setIsDemo(!!data.isDemo);
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
+      console.warn("Project Format API failed, returning locally generated layout:", err);
+      const generated = getLocalProjectFormat(finalTopic, subject, classNum);
+      setResult(generated);
+      setIsDemo(true);
     } finally {
       setLoading(false);
     }

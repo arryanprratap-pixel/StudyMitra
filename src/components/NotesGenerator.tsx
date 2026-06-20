@@ -8,6 +8,31 @@ interface NotesGeneratorProps {
   onSaveWork: (item: Omit<SavedWorkItem, "id" | "timestamp">) => void;
 }
 
+function getLocalNotes(topic: string, classNum: string, subject: string, length: "short" | "medium" | "long"): string {
+  const finalTopicName = topic || "Important Concepts";
+  const numBullets = length === "short" ? 3 : length === "medium" ? 6 : 10;
+  
+  return `# 📖 Class-Calibrated Study Notes: ${finalTopicName}
+*Class ${classNum} • Subject: ${subject} • Length: ${length} Notes • Reliable Fallback Mode*
+
+Here are the most important study points prepared specifically for your standard to make revision smooth and exciting:
+
+### 🌟 Topic Overview:
+Every critical system in **${subject}** is built of structured principles. When examining **${finalTopicName}**, we explore how key variables interact under unified academic frameworks.
+
+### 🔑 Core Key Points (Class-Optimized):
+- **Concept Principle**: ${finalTopicName} is a foundational building block in the CBSE/School curriculum.
+- **Why it Matters**: Understanding this is highly essential for scoring perfect marks in chapter assessments and midterm exams.
+- **Scientific/Social Truth**: All factors combine sequentially to deliver systematic, reproducible results.
+${numBullets > 3 ? `- **Interactive Guidance**: Sharing thoughts with study buddies or asking teachers in class clarifies typical homework questions quickly.\n- **Workbook Tips**: Practice drawing neat flowcharts or diagrams in your school copies to visualize the concepts.` : ""}
+${numBullets > 6 ? `- **Classroom Experiment**: Always observe variables systematically and record readings carefully during lab periods.\n- **Revision Cycle**: Dedicate at least 10 minutes daily to reading these definitions to secure great recall.\n- **Aesthetic Pairings**: Frame your answers in bullet points with highlighted key vocabularies to make notes look neat and highly scored.\n- **Vocabulary Expansion**: Note down difficult words separately in your personal school dictionary.` : ""}
+
+### 🏆 Top 3 Exam Tips:
+1. **Focus on Definitions**: Memorize key glossary terms exactly as stated in your textbook.
+2. **Step-by-Step Layout**: When answering long theory questions, break down responses with numbers or lists.
+3. **Continuous Testing**: Practice mini quizzes regularly to solidify your classroom scores!`;
+}
+
 export default function NotesGenerator({ onSaveWork }: NotesGeneratorProps) {
   const [topic, setTopic] = useState("");
   const [classNum, setClassNum] = useState("7");
@@ -22,10 +47,14 @@ export default function NotesGenerator({ onSaveWork }: NotesGeneratorProps) {
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!topic.trim()) {
-      setError("Please enter a topic to learn about.");
-      return;
+    
+    // Fallback topic if box is empty - Requirement 5
+    let finalTopic = topic.trim();
+    if (!finalTopic) {
+      finalTopic = `Class ${classNum} ${subject} Chapter Concepts`;
+      setTopic(finalTopic);
     }
+
     setError("");
     setLoading(true);
     setResult("");
@@ -36,7 +65,7 @@ export default function NotesGenerator({ onSaveWork }: NotesGeneratorProps) {
       const response = await fetch("/api/generate/notes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, classNum, subject, length }),
+        body: JSON.stringify({ topic: finalTopic, classNum, subject, length }),
       });
 
       if (!response.ok) {
@@ -48,7 +77,10 @@ export default function NotesGenerator({ onSaveWork }: NotesGeneratorProps) {
       setResult(data.text);
       setIsDemo(!!data.isDemo);
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
+      console.warn("Notes API call failed, generating fallback notes locally:", err);
+      const fallbackText = getLocalNotes(finalTopic, classNum, subject, length);
+      setResult(fallbackText);
+      setIsDemo(true);
     } finally {
       setLoading(false);
     }
