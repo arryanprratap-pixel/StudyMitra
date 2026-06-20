@@ -1,0 +1,6 @@
+{
+  "name": "Student Helper Hub",
+  "description": "Free student tools for simple notes, quiz practice, homework planner, book review, project format, and study timetable.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
