@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FileText, Sparkles, Loader2, Copy, Download, Check, Save } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { copyToClipboard, downloadTextFile } from "../utils";
+import { copyToClipboard, downloadTextFile, getClassLevelStyle } from "../utils";
 import { SavedWorkItem } from "../types";
 
 interface ProjectFormatMakerProps {
@@ -10,47 +10,196 @@ interface ProjectFormatMakerProps {
 
 function getLocalProjectFormat(topic: string, subject: string, classNum: string): string {
   const finalTopic = topic.trim() || `Amazing ${subject} Exploration`;
-  return `# 🎨 Creative School Project Guide: ${finalTopic}
-*Subject Category: ${subject} • Tailored for Class ${classNum} Standard • Local Calibration Mode*
+  const style = getClassLevelStyle(classNum);
 
-## 📁 1. Project Cover Page Guidelines:
-- **School Name**: [Write Your Registered School Name]
-- **Project Topic Title**: Investigated Analysis of "${finalTopic}"
-- **Course Subject**: ${subject}
-- **Submitted By**: [Your Name], Class ${classNum}
-- **Submitted To**: [Your Class Teacher's Name]
+  if (style.tier === "kinder") {
+    return `# 🎨 Playful Craft Scrapbook: "${finalTopic}" 🎪
+*Class ${classNum} Fun Project • Kinder/Prep Level*
 
 ---
-
-## 📝 2. Outline & Introduction:
-This project aims to investigate the deep conceptual features behind **${finalTopic}**. We explore how its rules apply to daily scenarios, execute mock calculations where appropriate, and summarize core curriculum points.
-
-### 🎯 Core Objectives:
-1. To understand the primary laws governing ${finalTopic}.
-2. To compile neat, structured references suitable for Class ${classNum} students.
-3. To build interactive, hands-on craft representations.
+### 🎈 Front Cover Guidelines:
+- **Draw on Top**: A huge smiling yellow sun! ☀️
+- **Title**: My Happy Book about "${finalTopic}"
+- **My Name**: [Your Name here]
+- **My Class**: Class ${classNum}
 
 ---
-
-## 🛠️ 3. Materials & Craft Tools Required:
-- Clean white chart papers or project catalog files.
-- Sketch markers, rulers, pencil set, and glues.
-- Grade ${classNum} ${subject} textbook references.
-- Printed maps, diagram drawings, or hand-painted sketches showing cycles.
+### 🍭 What is this craft about?
+We are going to learn about **"${finalTopic}"** using colored papers and stars!
+1. It helps us see how ${subject} makes things move or grow!
+2. Like we see in: *${style.examples[0]}*.
 
 ---
-
-## 👣 4. Step-by-Step Layout Instructions:
-- **Step 1: Front Page Design**: Create an elegant double border with light geometric leaves or stars. Use large bold fonts for the title.
-- **Step 2: Introduction**: Lay out a paragraph summarizing why learning ${finalTopic} matters.
-- **Step 3: Core Diagram Page**: Draw a neat, labeled sketch (e.g., flowchart or step-by-step cycle) representing the concept inputs and results.
-- **Step 4: Practical Findings/Case Study**: Write 3 points detailing how we observe this concept in nature or local neighborhoods.
-- **Step 5: Learnings Summary**: Outline what you figured out while preparing this project layout!
+### ✂️ Toys & Art Items We Need:
+- Soft child-safe blunt scissors.
+- Playdough, glue stick, and green glitters.
+- Bright yellow or blue crayon sticks.
 
 ---
+### 👣 Easy Steps to Make:
+- **Step 1**: Glue 3 shiny stars on your cover page!
+- **Step 2**: Draw a big friendly flower or ball representing **${finalTopic}**.
+- **Step 3**: Glue some green grass at the base.
+- **Step 4**: Give this finished happy project notebook to your teacher with a massive smile! ⭐`;
+  }
 
-## 🏆 5. Summary & Self-Evaluation:
-Completing this CBSE-aligned project format proved that studying **${finalTopic}** teaches us practical, long-term skills in ${subject}. Consistent efforts, neat margins, and bulleted text keys deliver excellent classroom grades!`;
+  if (style.tier === "elementary") {
+    return `# 💡 Elementary School Project File: "${finalTopic}"
+*Class ${classNum} Standard • Subject: ${subject} • Easy Layout*
+
+---
+### 📁 Title Page Requirements:
+- **Project Topic**: Practical Study of ${finalTopic}
+- **Subject**: ${subject}
+- **Prepared By**: [Student Name], Class ${classNum}
+- **Submitted To**: [Teacher's Name]
+
+---
+### 📋 1. Project Introduction:
+The point of this elementary scrapbook is to show that **${finalTopic}** plays an exciting role in **${subject}**. 
+When we study our surrounding world, we notice that:
+- *${style.examples[0]}* is a wonderful example of these lessons in action.
+- Learning these rules makes our science experiments easy!
+
+---
+### 🎨 2. materials checklist:
+* Standard drawing file or white chart pages.
+* Sketch markers, pencil box, eraser, and plastic ruler.
+* Reference pictures or cartoon clips describing the theme.
+
+---
+### 👣 3. Simple Project Steps:
+- **Step 1**: Use your ruler to draw neat 2cm straight pencil borders on all pages.
+- **Step 2**: Write down the definitions of **${finalTopic}** in simple words on Page 1.
+- **Step 3**: Draw a hand-colored diagram (with standard descriptions) on Page 2.
+- **Step 4**: List 2 daily homework problems you can solve using this topic.
+- **Step 5**: Write a neat "My Learnings" paragraph to finish the book.
+
+---
+### 🎓 4. Core Takeaway Summary:
+Creating this project helper workbook shows that **${finalTopic}** lets us solve daily tasks with ease. Having clean hand-written lines boosts our handwriting marks!`;
+  }
+
+  if (style.tier === "middle") {
+    return `# 📖 School Project Folder Layout: "${finalTopic}"
+*Tailored for Class ${classNum} • Subject: ${subject} • Middle Grade Standard*
+
+---
+### 📁 Section 1: Standard Notebook Cover Page:
+* **Host Institution**: [Your Registered School Name]
+* **Project Theme**: Systemic Exploration of "${finalTopic}"
+* **Academic Subject**: ${subject}
+* **Submitted By**: [Your Name], Class ${classNum}
+* **Supervising Teacher**: [Science/Language Teacher Name]
+
+---
+### 📝 Section 2: Outline & Practical Purpose:
+This middle-grade workspace file compiles critical references regarding **${finalTopic}** under ${subject} syllabus.
+
+#### 🎯 Primary Investigative Goals:
+1. To outline the central mechanism governing **${finalTopic}**.
+2. To compile clear bullet points illustrating core definitions.
+3. To represent the inputs and outputs using neat visual flowcharts.
+
+---
+### 🛠️ Section 3: Laboratory & Craft Assets Needed:
+- Loose ruled project sheets with decorative sidebar margins.
+- Colored sketch pens and geometry tools (compass, protractor).
+- Class ${classNum} textbook references and school maps.
+- Prints of diagrams like **${style.examples[0]}**.
+
+---
+### 👣 Section 4: Step-by-Step Construction Method:
+- **Phase A**: Frame Title Page with double borders using bold letters.
+- **Phase B**: Write a 100-word introduction detailing the scientific/grammatical background of ${finalTopic}.
+- **Phase C**: Draw a detailed flowchart or stage cycle representing relevant processes.
+- **Phase D**: Detail 3 practical observations or real-world parameters.
+- **Phase E**: Complete a self-evaluation summary outlining key classroom learnings.
+
+---
+### 🏆 Section 5: Summary Evaluation:
+Through this CBSE-aligned Class ${classNum} project, we proved that **${finalTopic}** is a critical foundation. Maintaining clear, numbered bullet points provides excellent layout marks!`;
+  }
+
+  if (style.tier === "secondary") {
+    return `# 🎯 CBSE Board Syllabus Project File: "${finalTopic}"
+*Class ${classNum} Practical Folder • Subject: ${subject} • Structured Exam Standard*
+
+---
+### 📁 Part 1: Front Page & Index Layout:
+- **Title**: A Comprehensive Study and Analysis of **"${finalTopic}"**
+- **Course Label**: CBSE Board Syllabus Practicals
+- **Presented By**: [Your Name], Candidate ID [ID_NUMBER]
+- **Class/Division**: Class ${classNum} - Roll Number [Roll]
+- **Index matrix**: 
+  1. *Introduction & Historical Background*
+  2. *Theoretical Framework & Hypothesis*
+  3. *Core System Diagram/Model Layout*
+  4. *Case Study / Practical Experiments*
+  5. *References & Bibliographies*
+
+---
+### 🔬 Part 2: Introduction & Core Hypothesis:
+In high-school analytical streams, studying **${finalTopic}** is mandatory for understanding how dynamic variables operate under changing parameters.
+- **Theoretical Basis**: We propose that under standard guidelines, ${finalTopic} defines systemic outputs with predictable accuracy.
+- **Academic Application**: As discussed in *${style.examples[1]}*, this forms a cornerstone for the Class ${classNum} board curriculum.
+
+---
+### 📐 Part 3: Diagrams & Physical Models Needed:
+* Scientific diagram sheets, graph journals, or model templates.
+* Precise drawing tools, fine-tip liners, and proportional layout grids.
+* Reference syllabus handbook and mock previous-year questions (PYQs).
+
+---
+### 👣 Part 4: Step-by-Step Formulation Procedure:
+- **Step 1: Structural Setup**: Create a professional index and abstract sheet.
+- **Step 2: Define Core Laws**: Draft 3 standard definitions with appropriate symbols.
+- **Step 3: Graph/Model Insertion**: Propose a neat Cartesian graph or multi-stage block flow chart denoting changing conditions.
+- **Step 4: Real-world Case Study**: Write a 200-word analysis containing observation logs (e.g. comparing localized variables).
+- **Step 5: Reference Listing**: Cite school textbook authors and relevant educational references.
+
+---
+### 🏆 Part 5: Scholarly Conclusion & Evaluation:
+This CBSE boards workbook format demonstrates complete cognitive mastery of **${finalTopic}** in ${subject}. Perfect borders, clean citation listings, and well-spaced paragraphs represent the path to securing complete marks!`;
+  }
+
+  // Tier 5: Class 11-12 - Senior
+  return `# 🎓 Advanced Senior Research Project Report: "${finalTopic}"
+*Class ${classNum} • Advanced University-Prep Lab Journal • Subject: ${subject}*
+
+---
+### 📁 1. Structural Title Page & Certificate of Authenticity:
+- **Project Title**: Advanced Analytical Investigation into the Physicochemical/Structural Axioms of **"${finalTopic}"**
+- **Syllabus Category**: Class ${classNum} Advanced Laboratory Elective Practicals
+- **Investigator**: [Your Student Name], Board Registration Number: [REG_NUMBER]
+- **Academic Year**: 2026-02
+- **Supervisor**: PG Department Guidelines Teacher
+
+---
+### 🔬 2. Abstract & Theoretical Framework:
+This monograph addresses the mathematical or structural alignment of **"${finalTopic}"** in advanced ${subject} systems. We examine thermodynamic, sociological, or computational models governing its behavior.
+
+- **Foundational Formula**:
+  $$\\lim_{\\Phi \\to \\infty} \\mathbf{M}(\\Phi) \\propto \\lambda_{\\text{curriculum}} \\times e^{\\text{Practice Cycles}}$$
+- **Hypothesis**: The parameters defined during laboratory trials exhibit properties modeled in *${style.examples[0]}*.
+
+---
+### ⚙️ 3. Experimental Apparatus & High-Yield Reagents:
+- High-precision calculation calculators, notebooks, and reference matrices.
+- Dynamic data sheets, physical/logical graph models, and digital workspace files.
+- Original academic monographs, research papers, and CBSE board exemplars.
+
+---
+### 👣 4. Advanced Step-by-step Methodology:
+- **Phase 1: Literary Review**: Compile a 300-word review of existing structural definitions.
+- **Phase 2: Mathematical Derivations / Case Setup**: Derive primary formulas or establish strict test parameters for ${finalTopic}.
+- **Phase 3: Graphic Visualization**: Plot key observations in standard coordinates with clear trend directions.
+- **Phase 4: Critical Error Analysis**: Detail potential deviations from standard textbook constraints, pointing back to variables like temperature or ambient friction.
+- **Phase 5: Final Submission**: Present your finished folder with an appropriate bibliography page.
+
+---
+### 🏆 5. Scholarly Evaluation Summary:
+This senior-level portfolio proves that systematic analysis of **"${finalTopic}"** equips students with the cognitive skills demanded by collegiate portals. Pristine typography, accurate formatting, and rigorous formulas guarantee 100% textbook grading execution!`;
 }
 
 export default function ProjectFormatMaker({ onSaveWork }: ProjectFormatMakerProps) {
